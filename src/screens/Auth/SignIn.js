@@ -22,8 +22,7 @@ export default function SignIn() {
   const signIn = async () => {
     try {
       const user = await Auth.signIn(email, password);
-      console.log(user);
-      navigation.navigate("ProfileIndex");
+      navigation.navigate("Home");
     } catch (error) {
       console.log("error signing in", error);
       setOpacity(1);
@@ -61,6 +60,11 @@ export default function SignIn() {
       <View style={styles.footerButtonContainer}>
         <TouchableOpacity onPress={() => navigation.navigate("SignUp")}>
           <Text style={styles.forgotPasswordButtonText}>沒有帳號？註冊</Text>
+        </TouchableOpacity>
+      </View>
+      <View style={styles.footerButtonContainer}>
+        <TouchableOpacity onPress={() => navigation.navigate("ForgotPassword")}>
+          <Text style={styles.forgotPasswordButtonText}>忘記密碼</Text>
         </TouchableOpacity>
       </View>
     </SafeAreaView>

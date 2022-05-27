@@ -3,9 +3,7 @@ import { View, Text, FlatList, StyleSheet } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import AppCard from "../components/AppCard";
 import { News } from "../models";
-import { DataStore, Hub } from "aws-amplify";
-import AppButton from "../components/AppButton";
-import { useNavigation } from "@react-navigation/native";
+import { DataStore } from "aws-amplify";
 
 const DATA = [
   {
@@ -29,75 +27,22 @@ const DATA = [
 ];
 
 export default Home = () => {
-  useEffect(() => {
-    const listener = (data) => {
-      const { event } = data.payload;
-      // console.log(event);
-      if (event === "SUCCESS" || event === "signIn" || event === "signOut") {
-        checkAuthState();
-      }
-    };
-    Hub.listen("auth", listener);
-    return () => Hub.remove("auth", listener);
+  const renderItem = ({ item }) => (
+    <AppCard title={item.title} description={item.description} />
+  );
+  const [news, setNews] = useState([]);
+  useEffect(async () => {
+    const newsData = await DataStore.query(News);
+    console.log(newsData);
+    setNews(newsData);
   }, []);
-  useEffect(() => {
-    checkAuthState();
-  }, []);
-  const [user, setUser] = useState(undefined);
-
-  const checkAuthState = async () => {
-    try {
-      const authUser = await Auth.currentAuthenticatedUser({
-        bypassCache: true,
-      });
-      console.log("Home: User is signed in: " + user);
-      setUser(authUser);
-    } catch (err) {
-      console.log("User is not signed in");
-      setUser(null);
-    }
-  };
-  const navigation = useNavigation();
-  async function signOut() {
-    try {
-      await Auth.signOut();
-    } catch (error) {
-      console.log("error signing out: ", error);
-    }
-  }
-
-  console.log(user);
 
   return (
     <SafeAreaView style={styles.container}>
-      {user ? (
-        <AppButton title="SignOut" onPress={() => signOut()} />
-      ) : (
-        <AppButton
-          title="SignIn"
-          onPress={() => navigation.navigate("SignIn")}
-        />
-      )}
-      <AppButton title="Rehab" onPress={() => navigation.navigate("Rehab")} />
-      <AppButton
-        title="JobPromotion"
-        onPress={() => navigation.navigate("JobPromotion")}
-      />
-      <AppButton
-        title="HearingAssessment"
-        onPress={() => navigation.navigate("Rehab")}
-      />
-      <AppButton
-        title="HearingCare"
-        onPress={() => navigation.navigate("HearingCare")}
-      />
-      <AppButton
-        title="HearingTry"
-        onPress={() => navigation.navigate("HearingTry")}
-      />
-      <AppButton
-        title="Contact"
-        onPress={() => navigation.navigate("Contact")}
+      <FlatList
+        data={news}
+        renderItem={renderItem}
+        keyExtractor={(item) => item.id}
       />
     </SafeAreaView>
   );

@@ -13,21 +13,12 @@ export default SignIn = () => {
   const [confirmPassword, setConfirmPassword] = useState("");
   const navigation = useNavigation();
 
-  const signUp = async () => {
-    if (password !== confirmPassword) {
-      return;
-    }
+  const forgotPassword = async () => {
     try {
-      const user = await Auth.signUp({
-        username: email,
-        password: password,
-        attributes: {
-          email: email,
-          phone_number: "+886" + number,
-        },
-      });
-      console.log(user);
-      navigation.navigate("ConfirmSignUp", { username: email });
+      const data = await Auth.forgotPassword(email);
+      console.log(data);
+      //   console.log(user);
+      //   navigation.navigate("ConfirmSignUp", { username: email });
     } catch (error) {
       console.log("error signing up", error);
     }
@@ -35,7 +26,6 @@ export default SignIn = () => {
 
   return (
     <SafeAreaView style={styles.container}>
-      <Text>Hello World!</Text>
       <AppTextInput
         value={email}
         onChangeText={setEmail}
@@ -44,37 +34,12 @@ export default SignIn = () => {
         textContentType="username"
         leftIcon="account"
       />
-      <AppTextInput
-        value={number}
-        onChangeText={setNumber}
-        placeholder="輸入電話"
-        autoCapitalize="none"
-        textContentType="telephoneNumber"
-        keyboardType="number-pad"
-        leftIcon="cellphone"
-      />
-      <AppTextInput
-        value={password}
-        onChangeText={setPassword}
-        placeholder="輸入密碼"
-        autoCapitalize="none"
-        secureTextEntry
-        textContentType="password"
-        leftIcon="lock"
-      />
-      <AppTextInput
-        value={confirmPassword}
-        onChangeText={setConfirmPassword}
-        placeholder="再次輸入密碼"
-        autoCapitalize="none"
-        secureTextEntry
-        leftIcon="lock"
-      />
-      <AppButton title="註冊" onPress={signUp} />
+
+      <AppButton title="確認" onPress={forgotPassword} />
       <View style={styles.footerButtonContainer}>
-        <TouchableOpacity onPress={() => navigation.navigate("SignIn")}>
+        {/* <TouchableOpacity onPress={() => navigation.navigate("SignIn")}>
           <Text style={styles.forgotPasswordButtonText}>已有帳號？登入</Text>
-        </TouchableOpacity>
+        </TouchableOpacity> */}
       </View>
     </SafeAreaView>
   );

@@ -57,7 +57,6 @@ export default Profile = () => {
       setUser(null);
     }
   };
-  console.log(user);
   return (
     <SafeAreaView>
       {CONFIG.map((item) => {
