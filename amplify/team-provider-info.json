@@ -13,7 +13,8 @@
     },
     "categories": {
       "auth": {
-        "awesomeproject3ab48687": {}
+        "awesomeproject3ab48687": {},
+        "true": {}
       }
     }
   }

@@ -2,8 +2,8 @@ import React, { useState, useEffect } from "react";
 import { View, Text, FlatList, StyleSheet } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import AppCard from "../components/AppCard";
-import { News } from "../models";
-import { DataStore } from "aws-amplify";
+import { Events } from "../models";
+import { DataStore, Storage } from "aws-amplify";
 
 const DATA = [
   {
@@ -28,19 +28,30 @@ const DATA = [
 
 export default Home = () => {
   const renderItem = ({ item }) => (
-    <AppCard title={item.title} description={item.description} />
+    <AppCard
+      title={item.name}
+      description={item.description}
+      imageKey={item.imageKey}
+    />
   );
-  const [news, setNews] = useState([]);
+  const [events, setEvents] = useState([]);
   useEffect(async () => {
-    const newsData = await DataStore.query(News);
-    console.log(newsData);
-    setNews(newsData);
+    const events = await DataStore.query(Events, (e) => e.page("eq", "Rehab"));
+
+    for (let i = 0; i < events.length; i++) {
+      let event = events[i];
+      const imageUri = await Storage.get(event.imageKey);
+      const eventUpdatedUri = { ...event, imageKey: imageUri };
+      events[i] = eventUpdatedUri;
+    }
+    console.log(events);
+    setEvents(events);
   }, []);
 
   return (
     <SafeAreaView style={styles.container}>
       <FlatList
-        data={news}
+        data={events}
         renderItem={renderItem}
         keyExtractor={(item) => item.id}
       />

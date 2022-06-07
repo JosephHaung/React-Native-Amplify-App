@@ -19,6 +19,7 @@ import { MaterialCommunityIcons } from "@expo/vector-icons";
 import ConfirmSignUpScreen from "../screens/Auth/ConfirmSignUp";
 import ProfileScreen from "../screens/Profile/Profile.js";
 import ForgotPasswordScreen from "../screens/Auth/ForgotPassword.js";
+import AppForm from "../components/AppForm.js";
 
 const Stack = createNativeStackNavigator();
 // const Tab = createBottomTabNavigator();
@@ -93,6 +94,7 @@ const Navigation = () => {
           component={HearingAssessmentScreen}
         />
         <Stack.Screen name="HearingTry" component={HearingTryScreen} />
+        <Stack.Screen name="AppForm" component={AppForm} />
 
         {/* Auth Stack */}
         <Stack.Screen name="SignIn" component={SignInScreen} />

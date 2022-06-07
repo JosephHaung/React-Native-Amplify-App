@@ -1,10 +1,16 @@
 import React from "react";
-import { StyleSheet, Text, View } from "react-native";
+import { StyleSheet, Text, View, Image } from "react-native";
 
-export default function AppCard({ title, description }) {
+export default function AppCard({ title, description, imageKey }) {
   return (
     <View style={styles.container}>
       <Text style={styles.title}>{title}</Text>
+      <Image
+        source={{
+          uri: imageKey,
+        }}
+        style={styles.image}
+      />
       <Text style={styles.description}>{description}</Text>
     </View>
   );
@@ -30,5 +36,9 @@ const styles = StyleSheet.create({
     color: "white",
     fontSize: 12,
     fontWeight: "400",
+  },
+  image: {
+    width: 100,
+    height: 100,
   },
 });

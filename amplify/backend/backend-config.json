@@ -50,5 +50,13 @@
         }
       }
     }
+  },
+  "function": {},
+  "storage": {
+    "s3awesomeprojectstorageef001036": {
+      "service": "S3",
+      "providerPlugin": "awscloudformation",
+      "dependsOn": []
+    }
   }
 }
