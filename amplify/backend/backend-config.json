@@ -49,9 +49,29 @@
           ]
         }
       }
+    },
+    "getToken": {
+      "service": "API Gateway",
+      "providerPlugin": "awscloudformation",
+      "dependsOn": [
+        {
+          "category": "function",
+          "resourceName": "awesomeprojecta0defe5a",
+          "attributes": [
+            "Name",
+            "Arn"
+          ]
+        }
+      ]
     }
   },
-  "function": {},
+  "function": {
+    "awesomeprojecta0defe5a": {
+      "build": true,
+      "providerPlugin": "awscloudformation",
+      "service": "Lambda"
+    }
+  },
   "storage": {
     "s3awesomeprojectstorageef001036": {
       "service": "S3",

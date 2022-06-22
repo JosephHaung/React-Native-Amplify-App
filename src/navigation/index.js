@@ -19,7 +19,7 @@ import { MaterialCommunityIcons } from "@expo/vector-icons";
 import ConfirmSignUpScreen from "../screens/Auth/ConfirmSignUp";
 import ProfileScreen from "../screens/Profile/Profile.js";
 import ForgotPasswordScreen from "../screens/Auth/ForgotPassword.js";
-import AppForm from "../components/AppForm.js";
+import AppForm from "../forms/HearingCareForm.js";
 
 const Stack = createNativeStackNavigator();
 // const Tab = createBottomTabNavigator();
