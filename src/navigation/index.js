@@ -20,7 +20,7 @@ import ConfirmSignUpScreen from "../screens/Auth/ConfirmSignUp";
 import ProfileScreen from "../screens/Profile/Profile.js";
 import ForgotPasswordScreen from "../screens/Auth/ForgotPassword.js";
 import AppForm from "../forms/HearingCareForm.js";
-
+import CalendarForm from "../forms/CalendarForm";
 const Stack = createNativeStackNavigator();
 // const Tab = createBottomTabNavigator();
 
@@ -94,7 +94,10 @@ const Navigation = () => {
           component={HearingAssessmentScreen}
         />
         <Stack.Screen name="HearingTry" component={HearingTryScreen} />
+
+        {/* Forms */}
         <Stack.Screen name="AppForm" component={AppForm} />
+        <Stack.Screen name="CalendarForm" component={CalendarForm} />
 
         {/* Auth Stack */}
         <Stack.Screen name="SignIn" component={SignInScreen} />

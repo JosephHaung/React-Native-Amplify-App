@@ -19,24 +19,42 @@ export const schema = {
                 },
                 "description": {
                     "name": "description",
+                    "isArray": false,
+                    "type": "String",
+                    "isRequired": false,
+                    "attributes": []
+                },
+                "imageKeys": {
+                    "name": "imageKeys",
                     "isArray": true,
                     "type": "String",
                     "isRequired": false,
                     "attributes": [],
                     "isArrayNullable": true
                 },
-                "imageKey": {
-                    "name": "imageKey",
-                    "isArray": false,
-                    "type": "String",
-                    "isRequired": false,
-                    "attributes": []
-                },
                 "page": {
                     "name": "page",
                     "isArray": false,
-                    "type": "String",
+                    "type": {
+                        "enum": "Page"
+                    },
                     "isRequired": true,
+                    "attributes": []
+                },
+                "signUpMethod": {
+                    "name": "signUpMethod",
+                    "isArray": false,
+                    "type": {
+                        "enum": "SignUpMethod"
+                    },
+                    "isRequired": true,
+                    "attributes": []
+                },
+                "formLink": {
+                    "name": "formLink",
+                    "isArray": false,
+                    "type": "String",
+                    "isRequired": false,
                     "attributes": []
                 },
                 "createdAt": {
@@ -148,7 +166,26 @@ export const schema = {
             ]
         }
     },
-    "enums": {},
+    "enums": {
+        "Page": {
+            "name": "Page",
+            "values": [
+                "REHAB",
+                "HEARING_ASSESSMENT",
+                "HEARING_CARE",
+                "HEARING_TRY",
+                "JOB_PROMOTION"
+            ]
+        },
+        "SignUpMethod": {
+            "name": "SignUpMethod",
+            "values": [
+                "GOOGLE_FORM",
+                "CALENDAR",
+                "APP_FORM"
+            ]
+        }
+    },
     "nonModels": {},
-    "version": "292003a87b2ed2da270dd49ef169b19d"
+    "version": "d54f72b10b233296c633e70242520149"
 };

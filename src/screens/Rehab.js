@@ -27,13 +27,7 @@ const DATA = [
 ];
 
 export default Home = () => {
-  const renderItem = ({ item }) => (
-    <AppCard
-      title={item.name}
-      description={item.description}
-      imageKey={item.imageKey}
-    />
-  );
+  const renderItem = ({ item }) => <AppCard item={item} />;
   const [events, setEvents] = useState([]);
   useEffect(async () => {
     const events = await DataStore.query(Events, (e) => e.page("eq", "Rehab"));

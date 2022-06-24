@@ -49,20 +49,7 @@ export default function AppForm() {
 
   return (
     <View>
-      <Controller
-        control={control}
-        render={({ field: { onChange, onBlur, value } }) => (
-          <AppTextInput onBlur={onBlur} onChangeText={onChange} value={value} />
-        )}
-        name="firstName"
-      />
-      <Controller
-        control={control}
-        render={({ field: { onChange, onBlur, value } }) => (
-          <AppTextInput onBlur={onBlur} onChangeText={onChange} value={value} />
-        )}
-        name="lastName"
-      />
+      <Text>This is calendar form</Text>
       <Button title="Submit" onPress={handleSubmit(onSubmit)} />
     </View>
   );

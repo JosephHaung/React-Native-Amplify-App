@@ -1,6 +1,11 @@
 import { API } from "aws-amplify";
-const SPREADSHEET_ID = "1g9M4TMCuaCu_ARtXSnF1s1is4Dzh2sh3Z1qRN1q4eSk";
-export default getTokenAndSubmit = async (rows, sheetId) => {
+import {
+  TIMETREE_CALENDAR_ID,
+  SPREADSHEET_ID,
+  TIMETREE_ACCESS_TOKEN,
+} from "@env";
+
+export const getTokenAndSubmitToSheets = async (rows, sheetId) => {
   const apiName = "getToken";
   const path = "/token";
   try {
@@ -49,4 +54,45 @@ const appendToSheets = (rows, token, sheetId) => {
     .catch((error) => {
       console.log(error);
     });
+};
+
+export const updateTimeTreeEvent = async (title, startTime, endTime) => {
+  try {
+    const res = await fetch(
+      `https://timetreeapis.com/calendars/${TIMETREE_CALENDAR_ID}/events`,
+      {
+        method: "POST",
+        headers: {
+          Authorization: `Bearer ${TIMETREE_ACCESS_TOKEN}`,
+          Accept: "application/vnd.timetree.v1+json",
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          data: {
+            attributes: {
+              title: title,
+              category: "schedule",
+              start_at: startTime,
+              start_timezone: "UTC+8",
+              end_at: endTime,
+              end_timezone: "UTC+8",
+              all_day: false,
+            },
+            relationships: {
+              label: {
+                data: {
+                  id: "2",
+                  type: "label",
+                },
+              },
+            },
+          },
+        }),
+      }
+    );
+
+    return true;
+  } catch (error) {
+    return false;
+  }
 };

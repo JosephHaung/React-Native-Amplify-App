@@ -1,12 +1,29 @@
+enum Page {
+  REHAB
+  HEARING_ASSESSMENT
+  HEARING_CARE
+  HEARING_TRY
+  JOB_PROMOTION
+}
+
+enum SignUpMethod {
+  GOOGLE_FORM
+  CALENDAR
+  APP_FORM
+}
+
 type Events @model @auth(rules: [{allow: public}]) {
   id: ID!
   name: String!
-  description: [String]
-  imageKey: String
-  page: String!
+  description: String
+  imageKeys: [String]
+  page: Page!
+  signUpMethod: SignUpMethod!
+  formLink: String
 }
 
 type News @model @auth(rules: [{allow: public}]) {
   title: String!
   description: String
-} 
+}
+ 

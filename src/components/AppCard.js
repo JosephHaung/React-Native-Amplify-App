@@ -1,17 +1,37 @@
+import { useNavigation } from "@react-navigation/native";
 import React from "react";
-import { StyleSheet, Text, View, Image } from "react-native";
+import { StyleSheet, Text, View, Image, Linking } from "react-native";
+import { SignUpMethod } from "../models";
+import AppButton from "./AppButton";
 
-export default function AppCard({ title, description, imageKey }) {
+export default function AppCard({ item }) {
+  const { title, description, imageKeys, signUpMethod, page, formLink } = item;
+  const navigation = useNavigation();
+
+  const onPressRegister = () => {
+    switch (signUpMethod) {
+      case SignUpMethod.APP_FORM:
+        navigation.navigate(page + "Form");
+        break;
+      case SignUpMethod.CALENDAR:
+        navigation.navigate("CalendarForm");
+        break;
+      case SignUpMethod.GOOGLE_FORM:
+        Linking.openURL(formLink);
+    }
+  };
+
   return (
     <View style={styles.container}>
       <Text style={styles.title}>{title}</Text>
       <Image
         source={{
-          uri: imageKey,
+          uri: imageKeys[0],
         }}
         style={styles.image}
       />
       <Text style={styles.description}>{description}</Text>
+      <AppButton title="我要報名" onPress={onPressRegister} />
     </View>
   );
 }
