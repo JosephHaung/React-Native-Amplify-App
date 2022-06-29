@@ -19,7 +19,7 @@
       "function": {
         "awesomeprojecta0defe5a": {
           "deploymentBucketName": "amplify-awesomeproject-dev-232054-deployment",
-          "s3Key": "amplify-builds/awesomeprojecta0defe5a-7437484761305a7a5353-build.zip"
+          "s3Key": "amplify-builds/awesomeprojecta0defe5a-4843722f644a35684d6c-build.zip"
         }
       }
     }

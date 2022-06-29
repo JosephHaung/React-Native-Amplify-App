@@ -5,7 +5,7 @@ import {
   TIMETREE_ACCESS_TOKEN,
 } from "@env";
 
-export const getTokenAndSubmitToSheets = async (rows, sheetId) => {
+export const getToken = async () => {
   const apiName = "getToken";
   const path = "/token";
   try {
@@ -18,7 +18,7 @@ export const getTokenAndSubmitToSheets = async (rows, sheetId) => {
       }),
     });
     const { access_token } = await res.json();
-    appendToSheets(rows, access_token, sheetId);
+    return access_token;
   } catch (error) {
     console.log(error);
   }

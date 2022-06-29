@@ -6,7 +6,8 @@ exports.handler = async (event) => {
   const secondsSinceEpoch = Math.round(new Date().getTime() / 1000);
   const claim = {
     iss: "test-530@tests-352500.iam.gserviceaccount.com",
-    scope: "https://www.googleapis.com/auth/spreadsheets",
+    scope:
+      "https://www.googleapis.com/auth/spreadsheets https://www.googleapis.com/auth/calendar",
     aud: "https://oauth2.googleapis.com/token",
     exp: secondsSinceEpoch + 3600,
     iat: secondsSinceEpoch,

@@ -1,14 +1,9 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { Text, View, TextInput, Button, Alert } from "react-native";
 import { useForm, Controller } from "react-hook-form";
 import AppTextInput from "../components/AppTextInput";
-import { getTokenAndSubmitToSheets } from "../functions";
-
-// // Config variables
-// const SPREADSHEET_ID = Config.REACT_APP_SPREADSHEET_ID;
-// const SHEET_ID = Config.REACT_APP_SHEET_ID;
-// const CLIENT_EMAIL = Config.REACT_APP_GOOGLE_CLIENT_EMAIL;
-// const PRIVATE_KEY = Config.REACT_APP_GOOGLE_SERVICE_PRIVATE_KEY;
+import { getToken, getTokenAndSubmitToSheets } from "../functions";
+import { CALENDAR_ID } from "@env";
 
 export default function AppForm() {
   const {
@@ -21,6 +16,34 @@ export default function AppForm() {
       lastName: "",
     },
   });
+
+  useEffect(() => {
+    getUpComingEvents();
+  }, []);
+
+  const getUpComingEvents = async () => {
+    try {
+      const token = await getToken();
+      const now = new Date().toISOString();
+      const twoWeeksLater = new Date();
+      twoWeeksLater.setDate(twoWeeksLater.getDate() + 14);
+      const res = await fetch(
+        `https://www.googleapis.com/calendar/v3/calendars/${CALENDAR_ID}/events?timeMin=${now}&timeMax=${twoWeeksLater.toISOString()}&singleEvents=true`,
+        {
+          method: "GET",
+          headers: {
+            "Content-Type": "application/json",
+            //update this token with yours.
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
+      const events = await res.json();
+      console.log(events);
+    } catch (error) {
+      console.log(error);
+    }
+  };
 
   const onSubmit = async (row) => {
     let arr = [];
@@ -44,7 +67,7 @@ export default function AppForm() {
       }
     }
     row = { values: arr };
-    getTokenAndSubmitToSheets([row], 263936640);
+    // getTokenAndSubmitToSheets([row], 263936640);
   };
 
   return (
