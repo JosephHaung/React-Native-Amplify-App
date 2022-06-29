@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import { View, Text, FlatList, StyleSheet } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import AppCard from "../components/AppCard";
-import { Events } from "../models";
+import { Events, Page } from "../models";
 import { DataStore, Storage } from "aws-amplify";
 
 const DATA = [
@@ -30,7 +30,9 @@ export default Home = () => {
   const renderItem = ({ item }) => <AppCard item={item} />;
   const [events, setEvents] = useState([]);
   useEffect(async () => {
-    const events = await DataStore.query(Events, (e) => e.page("eq", "Rehab"));
+    const events = await DataStore.query(Events, (e) =>
+      e.page("eq", Page.REHAB)
+    );
 
     for (let i = 0; i < events.length; i++) {
       let event = events[i];
