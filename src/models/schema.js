@@ -10,8 +10,8 @@ export const schema = {
                     "isRequired": true,
                     "attributes": []
                 },
-                "name": {
-                    "name": "name",
+                "title": {
+                    "name": "title",
                     "isArray": false,
                     "type": "String",
                     "isRequired": true,
@@ -24,8 +24,8 @@ export const schema = {
                     "isRequired": false,
                     "attributes": []
                 },
-                "imageKeys": {
-                    "name": "imageKeys",
+                "images": {
+                    "name": "images",
                     "isArray": true,
                     "type": "String",
                     "isRequired": false,
@@ -187,5 +187,5 @@ export const schema = {
         }
     },
     "nonModels": {},
-    "version": "d54f72b10b233296c633e70242520149"
+    "version": "dbe66801559cdfe031552db4af2b57c0"
 };

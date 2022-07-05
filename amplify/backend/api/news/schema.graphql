@@ -1,3 +1,13 @@
+type Events @model @auth(rules: [{allow: public}]) {
+  id: ID!
+  title: String!
+  description: String
+  images: [String]
+  page: Page!
+  signUpMethod: SignUpMethod!
+  formLink: String
+}
+
 enum Page {
   REHAB
   HEARING_ASSESSMENT
@@ -10,16 +20,6 @@ enum SignUpMethod {
   GOOGLE_FORM
   CALENDAR
   APP_FORM
-}
-
-type Events @model @auth(rules: [{allow: public}]) {
-  id: ID!
-  name: String!
-  description: String
-  imageKeys: [String]
-  page: Page!
-  signUpMethod: SignUpMethod!
-  formLink: String
 }
 
 type News @model @auth(rules: [{allow: public}]) {

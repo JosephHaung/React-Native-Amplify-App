@@ -26,9 +26,9 @@ type NewsMetaData = {
 
 export declare class Events {
   readonly id: string;
-  readonly name: string;
+  readonly title: string;
   readonly description?: string | null;
-  readonly imageKeys?: (string | null)[] | null;
+  readonly images?: (string | null)[] | null;
   readonly page: Page | keyof typeof Page;
   readonly signUpMethod: SignUpMethod | keyof typeof SignUpMethod;
   readonly formLink?: string | null;
