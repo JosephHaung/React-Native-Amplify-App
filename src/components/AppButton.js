@@ -2,28 +2,49 @@ import React from "react";
 import { StyleSheet, Text, TouchableOpacity } from "react-native";
 import colors from "../theme/colors";
 
-export default function AppButton({ title, onPress }) {
+export default function AppButton({
+  title,
+  onPress,
+  style,
+  bgColor = colors.primary,
+  textColor = colors.background,
+  leftIcon,
+}) {
   return (
-    <TouchableOpacity style={styles.button} onPress={onPress}>
-      <Text style={styles.buttonText}>{title}</Text>
+    <TouchableOpacity
+      style={[styles(bgColor).button, style, { backgroundColor: bgColor }]}
+      onPress={onPress}
+    >
+      {leftIcon}
+      <Text style={[styles(bgColor).buttonText, { color: textColor }]}>
+        {title}
+      </Text>
     </TouchableOpacity>
   );
 }
 
-const styles = StyleSheet.create({
-  button: {
-    marginVertical: 10,
-    borderRadius: 25,
-    justifyContent: "center",
-    alignItems: "center",
-    padding: 15,
-    width: "80%",
-    backgroundColor: colors.secondary,
-  },
-  buttonText: {
-    color: "white",
-    fontSize: 18,
-    fontWeight: "600",
-    textTransform: "uppercase",
-  },
-});
+const styles = (bgColor) =>
+  StyleSheet.create({
+    button: {
+      justifyContent: "center",
+      alignItems: "center",
+      shadowColor: bgColor,
+      shadowOffset: {
+        width: 2,
+        height: 2,
+      },
+      shadowOpacity: 0.5,
+      shadowRadius: 2.54,
+      elevation: 3,
+      // width: "100%",
+      borderRadius: 10,
+      padding: 10,
+      flexDirection: "row",
+    },
+    buttonText: {
+      color: colors.primary,
+      fontSize: 14,
+      fontWeight: "600",
+      // textTransform: "uppercase",
+    },
+  });

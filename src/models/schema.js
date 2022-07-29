@@ -1,7 +1,7 @@
 export const schema = {
     "models": {
-        "Events": {
-            "name": "Events",
+        "Items": {
+            "name": "Items",
             "fields": {
                 "id": {
                     "name": "id",
@@ -75,7 +75,7 @@ export const schema = {
                 }
             },
             "syncable": true,
-            "pluralName": "Events",
+            "pluralName": "Items",
             "attributes": [
                 {
                     "type": "model",
@@ -187,5 +187,5 @@ export const schema = {
         }
     },
     "nonModels": {},
-    "version": "dbe66801559cdfe031552db4af2b57c0"
+    "version": "c2ccf051a66c9761205fb17d982d4ca0"
 };

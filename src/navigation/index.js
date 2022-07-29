@@ -9,11 +9,6 @@ import SignUpScreen from "../screens/Auth/SignUp";
 // import ForgotPasswordScreen from '../screens/ForgotPasswordScreen';
 // import NewPasswordScreen from '../screens/NewPasswordScreen';
 import HomeScreen from "../screens/Home";
-import RehabScreen from "../screens/Rehab";
-import JobPromotionScreen from "../screens/JobPromotion";
-import HearingCareScreen from "../screens/HearingCare";
-import HearingAssessmentScreen from "../screens/HearingAssessment";
-import HearingTryScreen from "../screens/HearingTry";
 import { Auth, Hub } from "aws-amplify";
 import { MaterialCommunityIcons } from "@expo/vector-icons";
 import ConfirmSignUpScreen from "../screens/Auth/ConfirmSignUp";
@@ -21,6 +16,11 @@ import ProfileScreen from "../screens/Profile/Profile.js";
 import ForgotPasswordScreen from "../screens/Auth/ForgotPassword.js";
 import AppForm from "../forms/HearingCareForm.js";
 import CalendarForm from "../forms/CalendarForm";
+import HearingCareForm from "../forms/HearingCareForm";
+import CalendarInfoForm from "../forms/CalendarInfoForm";
+import ContactScreen from "../screens/Contact";
+import AppDetailPageScreen from "../screens/AppDetailPage";
+
 const Stack = createNativeStackNavigator();
 // const Tab = createBottomTabNavigator();
 
@@ -86,24 +86,37 @@ const Navigation = () => {
           //   ),
           // }}
         />
-        <Stack.Screen name="Rehab" component={RehabScreen} />
-        <Stack.Screen name="JobPromotion" component={JobPromotionScreen} />
-        <Stack.Screen name="HearingCare" component={HearingCareScreen} />
-        <Stack.Screen
-          name="HearingAssessment"
-          component={HearingAssessmentScreen}
-        />
-        <Stack.Screen name="HearingTry" component={HearingTryScreen} />
+        <Stack.Screen name="AppDetailPage" component={AppDetailPageScreen} />
+
+        <Stack.Screen name="Contact" component={ContactScreen} />
 
         {/* Forms */}
         <Stack.Screen name="AppForm" component={AppForm} />
         <Stack.Screen name="CalendarForm" component={CalendarForm} />
+        <Stack.Screen name="CalendarInfoForm" component={CalendarInfoForm} />
+        <Stack.Screen name="HearingCareForm" component={HearingCareForm} />
 
         {/* Auth Stack */}
-        <Stack.Screen name="SignIn" component={SignInScreen} />
-        <Stack.Screen name="SignUp" component={SignUpScreen} />
-        <Stack.Screen name="ConfirmSignUp" component={ConfirmSignUpScreen} />
-        <Stack.Screen name="ForgotPassword" component={ForgotPasswordScreen} />
+        <Stack.Screen
+          name="SignIn"
+          component={SignInScreen}
+          options={{ headerShown: false }}
+        />
+        <Stack.Screen
+          name="SignUp"
+          component={SignUpScreen}
+          options={{ headerShown: false }}
+        />
+        <Stack.Screen
+          name="ConfirmSignUp"
+          component={ConfirmSignUpScreen}
+          options={{ headerShown: false }}
+        />
+        <Stack.Screen
+          name="ForgotPassword"
+          component={ForgotPasswordScreen}
+          options={{ headerShown: false }}
+        />
       </Stack.Navigator>
     </NavigationContainer>
   );

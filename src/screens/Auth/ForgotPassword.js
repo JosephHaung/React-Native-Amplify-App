@@ -1,5 +1,12 @@
 import React, { useState } from "react";
-import { View, Text, StyleSheet, TouchableOpacity } from "react-native";
+import {
+  View,
+  Text,
+  StyleSheet,
+  TouchableOpacity,
+  TouchableWithoutFeedback,
+  Keyboard,
+} from "react-native";
 import { Auth } from "aws-amplify";
 import AppTextInput from "../../components/AppTextInput";
 import { useNavigation } from "@react-navigation/native";
@@ -12,6 +19,7 @@ export default SignIn = () => {
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
   const navigation = useNavigation();
+  const [errorMessage, setErrorMessage] = useState(null);
 
   const forgotPassword = async () => {
     try {
@@ -21,27 +29,48 @@ export default SignIn = () => {
       //   navigation.navigate("ConfirmSignUp", { username: email });
     } catch (error) {
       console.log("error signing up", error);
+      setErrorMessage("發送失敗，請稍後再試");
     }
   };
 
   return (
-    <SafeAreaView style={styles.container}>
-      <AppTextInput
-        value={email}
-        onChangeText={setEmail}
-        placeholder="輸入Email"
-        autoCapitalize="none"
-        textContentType="username"
-        leftIcon="account"
-      />
-
-      <AppButton title="確認" onPress={forgotPassword} />
-      <View style={styles.footerButtonContainer}>
-        {/* <TouchableOpacity onPress={() => navigation.navigate("SignIn")}>
-          <Text style={styles.forgotPasswordButtonText}>已有帳號？登入</Text>
-        </TouchableOpacity> */}
-      </View>
-    </SafeAreaView>
+    <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
+      <SafeAreaView style={styles.container}>
+        <Text
+          style={{
+            fontSize: 25,
+            fontWeight: "600",
+            textAlign: "left",
+            width: "85%",
+          }}
+        >
+          忘記密碼
+        </Text>
+        <AppTextInput
+          value={email}
+          onChangeText={setEmail}
+          placeholder="輸入Email"
+          autoCapitalize="none"
+          textContentType="username"
+          leftIcon="account"
+        />
+        {errorMessage && (
+          <Text style={{ fontSize: 14, color: "red", marginTop: 5 }}>
+            {errorMessage}
+          </Text>
+        )}
+        <AppButton
+          title="確認"
+          onPress={forgotPassword}
+          style={{ marginTop: 10, width: "85%" }}
+        />
+        <View style={styles.footerButtonContainer}>
+          <TouchableOpacity onPress={() => navigation.goBack()}>
+            <Text style={styles.forgotPasswordButtonText}>返回</Text>
+          </TouchableOpacity>
+        </View>
+      </SafeAreaView>
+    </TouchableWithoutFeedback>
   );
 };
 
@@ -51,6 +80,7 @@ const styles = StyleSheet.create({
     flexDirection: "column",
     alignItems: "center",
     justifyContent: "center",
+    backgroundColor: colors.background,
   },
   footerButtonContainer: {
     marginVertical: 15,
@@ -58,8 +88,8 @@ const styles = StyleSheet.create({
     alignItems: "center",
   },
   forgotPasswordButtonText: {
-    color: "tomato",
-    fontSize: 18,
+    color: colors.primary,
+    fontSize: 16,
     fontWeight: "600",
   },
 });

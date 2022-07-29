@@ -16,10 +16,10 @@ const SignUpMethod = {
   "APP_FORM": "APP_FORM"
 };
 
-const { Events, News } = initSchema(schema);
+const { Items, News } = initSchema(schema);
 
 export {
-  Events,
+  Items,
   News,
   Page,
   SignUpMethod

@@ -1,12 +1,20 @@
 import React, { useState, useEffect } from "react";
-import { View, Text, FlatList, StyleSheet } from "react-native";
+import {
+  View,
+  Text,
+  FlatList,
+  StyleSheet,
+  TouchableOpacity,
+  Dimensions,
+} from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
-import AppCard from "../components/AppCard";
+
 import { News } from "../models";
 import { DataStore, Auth, Hub } from "aws-amplify";
 import AppButton from "../components/AppButton";
 import { useNavigation } from "@react-navigation/native";
 import { S3Image } from "aws-amplify-react-native";
+import colors from "../theme/colors";
 
 export default Home = () => {
   useEffect(() => {
@@ -51,6 +59,8 @@ export default Home = () => {
 
   return (
     <SafeAreaView style={styles.container}>
+      {/* <View style={styles.topBarContainer}>
+
       {user ? (
         <AppButton title="SignOut" onPress={() => signOut()} />
       ) : (
@@ -59,31 +69,43 @@ export default Home = () => {
           onPress={() => navigation.navigate("SignIn")}
         />
       )}
-      <AppButton title="Rehab" onPress={() => navigation.navigate("Rehab")} />
-      <AppButton
+      </View> */}
+      <AppTile
+        title="Rehab"
+        onPress={() =>
+          navigation.navigate("AppDetailPage", { user, pageName: "REHAB" })
+        }
+      />
+      <AppTile
         title="JobPromotion"
-        onPress={() => navigation.navigate("JobPromotion")}
+        onPress={() => navigation.navigate("AppDetailPage")}
       />
-      <AppButton
+      <AppTile
         title="HearingAssessment"
-        onPress={() => navigation.navigate("Rehab")}
+        onPress={() => navigation.navigate("AppDetailPage", { user })}
       />
-      <AppButton
+      <AppTile
         title="HearingCare"
-        onPress={() => navigation.navigate("HearingCare")}
+        onPress={() => navigation.navigate("AppDetailPage")}
       />
-      <AppButton
+      <AppTile
         title="HearingTry"
-        onPress={() => navigation.navigate("HearingTry")}
+        onPress={() => navigation.navigate("AppDetailPage")}
       />
-      <AppButton
-        title="Contact"
-        onPress={() => navigation.navigate("Contact")}
-      />
-      <AppButton title="Form" onPress={() => navigation.navigate("AppForm")} />
+      <AppTile title="Contact" onPress={() => navigation.navigate("Contact")} />
     </SafeAreaView>
   );
 };
+
+const AppTile = ({ icon, onPress, title }) => {
+  return (
+    <TouchableOpacity onPress={onPress} style={styles.tileContainer}>
+      <Text style={styles.tileText}>{title}</Text>
+    </TouchableOpacity>
+  );
+};
+
+const TILE_SIZE = Dimensions.get("window").width * 0.4;
 
 const styles = StyleSheet.create({
   container: {
@@ -91,5 +113,26 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     flex: 1,
     marginHorizontal: 10,
+    flexDirection: "row",
+    flexWrap: "wrap",
   },
+  tileContainer: {
+    width: TILE_SIZE,
+    height: TILE_SIZE,
+    backgroundColor: colors.primary,
+    alignItems: "center",
+    justifyContent: "center",
+    borderRadius: 20,
+    shadowColor: "#000",
+    shadowOffset: {
+      width: 3,
+      height: 7,
+    },
+    shadowOpacity: 0.7,
+    shadowRadius: 4.59,
+    elevation: 5,
+    marginHorizontal: "3%",
+    marginVertical: "3%",
+  },
+  tileText: { fontSize: 20, fontWeight: "600", color: "#FFFFFF" },
 });

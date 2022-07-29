@@ -1,16 +1,27 @@
 import React, { useState } from "react";
-import { View, Text, StyleSheet, TouchableOpacity } from "react-native";
+import {
+  View,
+  Text,
+  StyleSheet,
+  TouchableOpacity,
+  TouchableWithoutFeedback,
+  Keyboard,
+} from "react-native";
 import { Auth } from "aws-amplify";
 import AppTextInput from "../../components/AppTextInput";
 import { useNavigation } from "@react-navigation/native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import AppButton from "../../components/AppButton";
+import colors from "../../theme/colors";
 
 export default SignIn = () => {
   const [email, setEmail] = useState("");
   const [number, setNumber] = useState("");
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
+  const [name, setName] = useState("");
+  const [errorMessage, setErrorMessage] = useState(null);
+
   const navigation = useNavigation();
 
   const signUp = async () => {
@@ -24,59 +35,126 @@ export default SignIn = () => {
         attributes: {
           email: email,
           phone_number: "+886" + number,
+          name: name,
         },
       });
-      console.log(user);
-      navigation.navigate("ConfirmSignUp", { username: email });
+      navigation.navigate("ConfirmSignUp", {
+        username: email,
+        password: password,
+      });
     } catch (error) {
+      setErrorMessage("註冊失敗，請檢查所有欄位");
       console.log("error signing up", error);
     }
   };
 
   return (
-    <SafeAreaView style={styles.container}>
-      <Text>Hello World!</Text>
-      <AppTextInput
-        value={email}
-        onChangeText={setEmail}
-        placeholder="輸入Email"
-        autoCapitalize="none"
-        textContentType="username"
-        leftIcon="account"
-      />
-      <AppTextInput
-        value={number}
-        onChangeText={setNumber}
-        placeholder="輸入電話"
-        autoCapitalize="none"
-        textContentType="telephoneNumber"
-        keyboardType="number-pad"
-        leftIcon="cellphone"
-      />
-      <AppTextInput
-        value={password}
-        onChangeText={setPassword}
-        placeholder="輸入密碼"
-        autoCapitalize="none"
-        secureTextEntry
-        textContentType="password"
-        leftIcon="lock"
-      />
-      <AppTextInput
-        value={confirmPassword}
-        onChangeText={setConfirmPassword}
-        placeholder="再次輸入密碼"
-        autoCapitalize="none"
-        secureTextEntry
-        leftIcon="lock"
-      />
-      <AppButton title="註冊" onPress={signUp} />
-      <View style={styles.footerButtonContainer}>
-        <TouchableOpacity onPress={() => navigation.navigate("SignIn")}>
-          <Text style={styles.forgotPasswordButtonText}>已有帳號？登入</Text>
-        </TouchableOpacity>
-      </View>
-    </SafeAreaView>
+    <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
+      <SafeAreaView style={styles.container}>
+        <View
+          style={{
+            flexDirection: "row",
+            justifyContent: "space-between",
+            alignItems: "center",
+            width: "85%",
+          }}
+        >
+          <Text
+            style={{
+              fontSize: 25,
+              fontWeight: "600",
+              marginBottom: 5,
+              // textAlign: "left",
+              // width: "85%",
+            }}
+          >
+            註冊
+          </Text>
+
+          {/* <AppButton
+          leftIcon={<AntDesign name="back" size={20} color={"#000"} />}
+          onPress={() => navigation.goBack()}
+          bgColor={colors.background}
+          style={{ shadowColor: "#000", shadowOpacity: 0.15 }}
+          // textColor="#fff"
+          // style={{ width: "85%", marginTop: 20 }}
+        /> */}
+        </View>
+        <AppTextInput
+          value={email}
+          onChangeText={(email) => {
+            setEmail(email);
+            setErrorMessage(null);
+          }}
+          placeholder="Email"
+          autoCapitalize="none"
+          textContentType="username"
+          leftIcon="email-outline"
+        />
+        <AppTextInput
+          value={number}
+          onChangeText={(number) => {
+            setNumber(number);
+            setErrorMessage(null);
+          }}
+          placeholder="電話"
+          autoCapitalize="none"
+          textContentType="telephoneNumber"
+          keyboardType="number-pad"
+          leftIcon="cellphone"
+        />
+        <AppTextInput
+          value={name}
+          onChangeText={(name) => {
+            setName(name);
+            setErrorMessage(null);
+          }}
+          placeholder="姓名"
+          autoCapitalize="none"
+          textContentType="name"
+          leftIcon="user"
+        />
+        <AppTextInput
+          value={password}
+          onChangeText={(pwd) => {
+            setPassword(pwd);
+            setErrorMessage(null);
+          }}
+          placeholder="密碼"
+          autoCapitalize="none"
+          secureTextEntry
+          textContentType="password"
+          leftIcon="lock"
+        />
+        <AppTextInput
+          value={confirmPassword}
+          onChangeText={(confirmPassword) => {
+            setConfirmPassword(confirmPassword);
+            setErrorMessage(null);
+          }}
+          placeholder="確認密碼"
+          autoCapitalize="none"
+          secureTextEntry
+          textContentType="password"
+          leftIcon="lock"
+        />
+        {errorMessage && (
+          <Text style={{ fontSize: 14, color: "red", marginTop: 5 }}>
+            {errorMessage}
+          </Text>
+        )}
+        <AppButton
+          title="註冊"
+          onPress={signUp}
+          style={{ marginTop: 10, width: "85%" }}
+        />
+        <View style={styles.footerButtonContainer}>
+          <TouchableOpacity onPress={() => navigation.navigate("SignIn")}>
+            <Text style={styles.forgotPasswordButtonText}>已有帳號？登入</Text>
+          </TouchableOpacity>
+        </View>
+      </SafeAreaView>
+    </TouchableWithoutFeedback>
   );
 };
 
@@ -86,6 +164,7 @@ const styles = StyleSheet.create({
     flexDirection: "column",
     alignItems: "center",
     justifyContent: "center",
+    backgroundColor: colors.background,
   },
   footerButtonContainer: {
     marginVertical: 15,
@@ -93,8 +172,8 @@ const styles = StyleSheet.create({
     alignItems: "center",
   },
   forgotPasswordButtonText: {
-    color: "tomato",
-    fontSize: 18,
+    color: colors.primary,
+    fontSize: 16,
     fontWeight: "600",
   },
 });

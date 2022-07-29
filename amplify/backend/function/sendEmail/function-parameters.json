@@ -1,0 +1,17 @@
+{
+  "lambdaLayers": [],
+  "environmentVariableList": [
+    {
+      "cloudFormationParameterName": "gmailClientId",
+      "environmentVariableName": "GMAIL_CLIENT_ID"
+    },
+    {
+      "cloudFormationParameterName": "gmailClientSecret",
+      "environmentVariableName": "GMAIL_CLIENT_SECRET"
+    },
+    {
+      "cloudFormationParameterName": "gmailRefreshToken",
+      "environmentVariableName": "GMAIL_REFRESH_TOKEN"
+    }
+  ]
+}

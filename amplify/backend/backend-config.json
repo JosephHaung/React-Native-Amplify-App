@@ -63,10 +63,29 @@
           ]
         }
       ]
+    },
+    "sendEmail": {
+      "service": "API Gateway",
+      "providerPlugin": "awscloudformation",
+      "dependsOn": [
+        {
+          "category": "function",
+          "resourceName": "sendEmail",
+          "attributes": [
+            "Name",
+            "Arn"
+          ]
+        }
+      ]
     }
   },
   "function": {
     "awesomeprojecta0defe5a": {
+      "build": true,
+      "providerPlugin": "awscloudformation",
+      "service": "Lambda"
+    },
+    "sendEmail": {
       "build": true,
       "providerPlugin": "awscloudformation",
       "service": "Lambda"

@@ -16,7 +16,7 @@ export enum SignUpMethod {
 
 
 
-type EventsMetaData = {
+type ItemsMetaData = {
   readOnlyFields: 'createdAt' | 'updatedAt';
 }
 
@@ -24,7 +24,7 @@ type NewsMetaData = {
   readOnlyFields: 'createdAt' | 'updatedAt';
 }
 
-export declare class Events {
+export declare class Items {
   readonly id: string;
   readonly title: string;
   readonly description?: string | null;
@@ -34,8 +34,8 @@ export declare class Events {
   readonly formLink?: string | null;
   readonly createdAt?: string | null;
   readonly updatedAt?: string | null;
-  constructor(init: ModelInit<Events, EventsMetaData>);
-  static copyOf(source: Events, mutator: (draft: MutableModel<Events, EventsMetaData>) => MutableModel<Events, EventsMetaData> | void): Events;
+  constructor(init: ModelInit<Items, ItemsMetaData>);
+  static copyOf(source: Items, mutator: (draft: MutableModel<Items, ItemsMetaData>) => MutableModel<Items, ItemsMetaData> | void): Items;
 }
 
 export declare class News {

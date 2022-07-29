@@ -20,6 +20,13 @@
         "awesomeprojecta0defe5a": {
           "deploymentBucketName": "amplify-awesomeproject-dev-232054-deployment",
           "s3Key": "amplify-builds/awesomeprojecta0defe5a-4843722f644a35684d6c-build.zip"
+        },
+        "sendEmail": {
+          "gmailClientId": "919448382503-3jtt8edj0p9jgp0bv5a2efafl55rhfbc.apps.googleusercontent.com",
+          "gmailClientSecret": "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",
+          "gmailRefreshToken": "1//04MthYfWUnVuQCgYIARAAGAQSNwF-L9IrTa-Kgz2dgU6eVeKX7ZkLpqVhlA1_Wvsv8DVe5aLOFoyVc4rcU5IIpjSCam8zGBmX5GI",
+          "deploymentBucketName": "amplify-awesomeproject-dev-232054-deployment",
+          "s3Key": "amplify-builds/sendEmail-43634d3048736d4b5a6e-build.zip"
         }
       }
     }
