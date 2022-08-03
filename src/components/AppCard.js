@@ -18,7 +18,7 @@ import Carousel, { Pagination } from "react-native-snap-carousel";
 const dimensions = Dimensions.get("window");
 const imageWidth = dimensions.width * 0.85;
 const imageHeight = (imageWidth * 3) / 4;
-[{ uri: "" }, { uri: "" }];
+
 export default function AppCard({ item, user }) {
   const { title, description, images, signUpMethod, page, formLink } = item;
   const navigation = useNavigation();

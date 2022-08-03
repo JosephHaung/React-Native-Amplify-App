@@ -15,6 +15,14 @@ import AppButton from "../components/AppButton";
 import { useNavigation } from "@react-navigation/native";
 import { S3Image } from "aws-amplify-react-native";
 import colors from "../theme/colors";
+import pageNames from "../pageName";
+import {
+  MaterialCommunityIcons,
+  AntDesign,
+  Entypo,
+  Ionicons,
+  Feather,
+} from "@expo/vector-icons";
 
 export default Home = () => {
   useEffect(() => {
@@ -55,10 +63,35 @@ export default Home = () => {
     }
   }
 
-  console.log(user);
+  const PAGES = [
+    {
+      name: "REHAB",
+      icon: <AntDesign name="tool" size={30} color={"#fff"} />,
+    },
+    {
+      name: "JOBPROMOTION",
+      icon: <AntDesign name="tool" size={30} color={"#fff"} />,
+    },
+    {
+      name: "HEARINGCARE",
+      icon: <AntDesign name="tool" size={30} color={"#fff"} />,
+    },
+    {
+      name: "HEARINGASSESSMENT",
+      icon: <AntDesign name="tool" size={30} color={"#fff"} />,
+    },
+    {
+      name: "HEARINGTRY",
+      icon: <AntDesign name="tool" size={30} color={"#fff"} />,
+    },
+    {
+      name: "CONTACT",
+      icon: <AntDesign name="tool" size={30} color={"#fff"} />,
+    },
+  ];
 
   return (
-    <SafeAreaView style={styles.container}>
+    <View style={styles.container}>
       {/* <View style={styles.topBarContainer}>
 
       {user ? (
@@ -70,36 +103,38 @@ export default Home = () => {
         />
       )}
       </View> */}
-      <AppTile
-        title="Rehab"
-        onPress={() =>
-          navigation.navigate("AppDetailPage", { user, pageName: "REHAB" })
-        }
-      />
-      <AppTile
-        title="JobPromotion"
-        onPress={() => navigation.navigate("AppDetailPage")}
-      />
-      <AppTile
-        title="HearingAssessment"
-        onPress={() => navigation.navigate("AppDetailPage", { user })}
-      />
-      <AppTile
-        title="HearingCare"
-        onPress={() => navigation.navigate("AppDetailPage")}
-      />
-      <AppTile
-        title="HearingTry"
-        onPress={() => navigation.navigate("AppDetailPage")}
-      />
-      <AppTile title="Contact" onPress={() => navigation.navigate("Contact")} />
-    </SafeAreaView>
+      <View style={styles.topBarContainer}>
+        <Text style={styles.topBarText}>重聽福利協會</Text>
+        <AppButton
+          leftIcon={<Feather name="user" size={30} color="black" />}
+          title=""
+          bgColor={colors.background}
+          onPress={() => navigation.navigate("User", { user })}
+          style={{
+            borderRadius: 30,
+            shadowColor: "#000",
+            shadowOpacity: 0.15,
+            // borderWidth: 2,
+          }}
+        />
+      </View>
+      {PAGES.map((page) => (
+        <AppTile
+          title={pageNames[page.name]}
+          onPress={() =>
+            navigation.navigate("AppDetailPage", { user, pageName: page.name })
+          }
+          icon={page.icon}
+        />
+      ))}
+    </View>
   );
 };
 
 const AppTile = ({ icon, onPress, title }) => {
   return (
     <TouchableOpacity onPress={onPress} style={styles.tileContainer}>
+      {icon}
       <Text style={styles.tileText}>{title}</Text>
     </TouchableOpacity>
   );
@@ -112,9 +147,9 @@ const styles = StyleSheet.create({
     alignItems: "center",
     justifyContent: "center",
     flex: 1,
-    marginHorizontal: 10,
     flexDirection: "row",
     flexWrap: "wrap",
+    backgroundColor: colors.background,
   },
   tileContainer: {
     width: TILE_SIZE,
@@ -134,5 +169,21 @@ const styles = StyleSheet.create({
     marginHorizontal: "3%",
     marginVertical: "3%",
   },
-  tileText: { fontSize: 20, fontWeight: "600", color: "#FFFFFF" },
+  tileText: {
+    fontSize: 20,
+    fontWeight: "600",
+    color: "#FFFFFF",
+    marginTop: 15,
+  },
+  topBarContainer: {
+    flexDirection: "row",
+    width: "85%",
+    justifyContent: "space-between",
+    alignItems: "center",
+    marginBottom: 80,
+  },
+  topBarText: {
+    fontSize: 30,
+    fontWeight: "700",
+  },
 });

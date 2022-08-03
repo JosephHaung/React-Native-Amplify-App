@@ -20,6 +20,7 @@ import HearingCareForm from "../forms/HearingCareForm";
 import CalendarInfoForm from "../forms/CalendarInfoForm";
 import ContactScreen from "../screens/Contact";
 import AppDetailPageScreen from "../screens/AppDetailPage";
+import UserScreen from "../screens/User.js";
 
 const Stack = createNativeStackNavigator();
 // const Tab = createBottomTabNavigator();
@@ -79,6 +80,7 @@ const Navigation = () => {
         <Stack.Screen
           name="Home"
           component={HomeScreen}
+          options={{ headerShown: false }}
           // options={{
           //   tabBarLabel: "首頁",
           //   tabBarIcon: ({ color, size }) => (
@@ -89,6 +91,7 @@ const Navigation = () => {
         <Stack.Screen name="AppDetailPage" component={AppDetailPageScreen} />
 
         <Stack.Screen name="Contact" component={ContactScreen} />
+        <Stack.Screen name="User" component={UserScreen} />
 
         {/* Forms */}
         <Stack.Screen name="AppForm" component={AppForm} />
