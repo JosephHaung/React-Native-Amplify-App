@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useStat, useRef } from "react";
 import {
   View,
   Text,
@@ -26,7 +26,7 @@ export default SignIn = () => {
       const data = await Auth.forgotPassword(email);
       console.log(data);
       //   console.log(user);
-      //   navigation.navigate("ConfirmSignUp", { username: email });
+      navigation.navigate("ResetPassword", { username: email });
     } catch (error) {
       console.log("error signing up", error);
       setErrorMessage("發送失敗，請稍後再試");

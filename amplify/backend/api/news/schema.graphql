@@ -26,4 +26,11 @@ type News @model @auth(rules: [{allow: public}]) {
   title: String!
   description: String
 }
+
+type Registration @model @auth(rules: [{allow: public}]) {
+  id: ID!
+  data: AWSJSON!
+  event: Items! @hasOne
+  email: AWSEmail!
+}
  

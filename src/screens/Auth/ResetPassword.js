@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useRef } from "react";
 import {
   View,
   Text,
@@ -12,22 +12,32 @@ import AppTextInput from "../../components/AppTextInput";
 import { useNavigation } from "@react-navigation/native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import AppButton from "../../components/AppButton";
-import colors from "../../theme/colors";
 
-export default ConfirmSignUp = ({ route }) => {
+export default ResetPassword = ({ route }) => {
   const [code, setCode] = useState("");
-  const [errorMessage, setErrorMessage] = useState(null);
+  const [password, setPassword] = useState("");
+  const [confirmPassword, setConfirmPassword] = useState("");
   const navigation = useNavigation();
+  const [errorMessage, setErrorMessage] = useState(null);
+  const confirmPasswordInput = useRef();
+  const codeInput = useRef();
 
-  const confirmSignUp = async () => {
+  const resetPassword = async () => {
+    if (password !== confirmPassword) {
+      setErrorMessage("密碼不相同");
+      return;
+    }
     try {
-      const user = await Auth.confirmSignUp(route.params.username, code);
-      await Auth.signIn(route.params.username, route.params.password);
-      console.log(user);
-      navigation.navigate("Home");
+      const data = await Auth.forgotPasswordSubmit(
+        route.params.username,
+        code,
+        password
+      );
+      //   console.log(user);
+      navigation.navigate("SignIn", { username: route.params.username });
     } catch (error) {
       console.log("error signing up", error);
-      setErrorMessage("驗證失敗");
+      setErrorMessage("發生錯誤，請稍後再試");
     }
   };
 
@@ -38,13 +48,47 @@ export default ConfirmSignUp = ({ route }) => {
           style={{
             fontSize: 25,
             fontWeight: "600",
-            marginBottom: 5,
             textAlign: "left",
             width: "85%",
           }}
         >
-          驗證帳號
+          重設密碼
         </Text>
+        <AppTextInput
+          value={password}
+          onChangeText={(pwd) => {
+            setPassword(pwd);
+            setErrorMessage(null);
+          }}
+          placeholder="新密碼"
+          autoCapitalize="none"
+          textContentType="password"
+          secureTextEntry
+          leftIcon="lock"
+          returnKeyType="next"
+          onSubmitEditing={() => {
+            confirmPasswordInput.current.focus();
+          }}
+          blurOnSubmit={false}
+        />
+        <AppTextInput
+          value={confirmPassword}
+          onChangeText={(pwd) => {
+            setConfirmPassword(pwd);
+            setErrorMessage(null);
+          }}
+          placeholder="確認新密碼"
+          autoCapitalize="none"
+          textContentType="password"
+          secureTextEntry
+          leftIcon="lock"
+          ref={confirmPasswordInput}
+          returnKeyType="next"
+          onSubmitEditing={() => {
+            codeInput.current.focus();
+          }}
+          blurOnSubmit={false}
+        />
         <AppTextInput
           value={code}
           onChangeText={(code) => {
@@ -56,6 +100,7 @@ export default ConfirmSignUp = ({ route }) => {
           textContentType="oneTimeCode"
           keyboardType="number-pad"
           leftIcon="account"
+          ref={codeInput}
         />
         {errorMessage && (
           <Text style={{ fontSize: 14, color: "red", marginTop: 5 }}>
@@ -64,7 +109,7 @@ export default ConfirmSignUp = ({ route }) => {
         )}
         <AppButton
           title="確認"
-          onPress={confirmSignUp}
+          onPress={resetPassword}
           style={{ marginTop: 10, width: "85%" }}
         />
         <View style={styles.footerButtonContainer}>
@@ -72,6 +117,9 @@ export default ConfirmSignUp = ({ route }) => {
             onPress={() => Auth.resendSignUp(route.params.username)}
           >
             <Text style={styles.forgotPasswordButtonText}>重發驗證碼</Text>
+          </TouchableOpacity>
+          <TouchableOpacity onPress={() => navigation.goBack()}>
+            <Text style={styles.forgotPasswordButtonText}>返回</Text>
           </TouchableOpacity>
         </View>
       </SafeAreaView>

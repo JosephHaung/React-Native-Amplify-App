@@ -100,7 +100,7 @@ export default Contact = () => {
               <AntDesign
                 name="phone"
                 size={20}
-                color="black"
+                color="#FFF"
                 style={{ marginRight: 5 }}
               />
             }
@@ -121,7 +121,7 @@ export default Contact = () => {
               <MaterialCommunityIcons
                 name="email-outline"
                 size={20}
-                color="black"
+                color="#FFF"
                 style={{ marginRight: 5 }}
               />
             }
@@ -162,7 +162,7 @@ export default Contact = () => {
               <Feather
                 name="facebook"
                 size={20}
-                color="black"
+                color="#FFF"
                 style={{ marginRight: 5 }}
               />
             }

@@ -8,12 +8,14 @@ import {
   Linking,
   Dimensions,
   Alert,
+  TouchableWithoutFeedback,
 } from "react-native";
 import { SignUpMethod } from "../models";
 import colors from "../theme/colors";
 import AppButton from "./AppButton";
 import * as WebBrowser from "expo-web-browser";
 import Carousel, { Pagination } from "react-native-snap-carousel";
+import ImageView from "react-native-image-viewing";
 
 const dimensions = Dimensions.get("window");
 const imageWidth = dimensions.width * 0.85;
@@ -23,6 +25,7 @@ export default function AppCard({ item, user }) {
   const { title, description, images, signUpMethod, page, formLink } = item;
   const navigation = useNavigation();
   const [activeIndex, setActiveIndex] = useState(0);
+  const [isVisible, setIsVisible] = useState(false);
 
   const onPressRegister = async () => {
     if (!user) {
@@ -41,10 +44,10 @@ export default function AppCard({ item, user }) {
     }
     switch (signUpMethod) {
       case SignUpMethod.APP_FORM:
-        navigation.navigate("HearingCareForm");
+        navigation.navigate("HearingCareForm", { event: item, user: user });
         break;
       case SignUpMethod.CALENDAR:
-        navigation.navigate("CalendarInfoForm");
+        navigation.navigate("CalendarInfoForm", { event: item, user: user });
         break;
       case SignUpMethod.GOOGLE_FORM:
         // Linking.openURL(formLink);
@@ -58,12 +61,14 @@ export default function AppCard({ item, user }) {
   };
   const renderItem = ({ item }) => {
     return (
-      <Image
-        source={{
-          uri: item.uri,
-        }}
-        style={styles.image}
-      />
+      <TouchableWithoutFeedback onPress={() => setIsVisible(true)}>
+        <Image
+          source={{
+            uri: item.uri,
+          }}
+          style={styles.image}
+        />
+      </TouchableWithoutFeedback>
     );
   };
   return (
@@ -100,6 +105,35 @@ export default function AppCard({ item, user }) {
             }}
           />
         </View>
+        <ImageView
+          images={images}
+          imageIndex={activeIndex}
+          visible={isVisible}
+          onRequestClose={() => setIsVisible(false)}
+          onImageIndexChange={setActiveIndex}
+          FooterComponent={({ imageIndex }) => {
+            return (
+              <Pagination
+                activeDotIndex={imageIndex}
+                dotsLength={images.length}
+                dotStyle={{
+                  width: 8,
+                  height: 8,
+                  borderRadius: 5,
+                  marginHorizontal: 0,
+                  backgroundColor: "#fff",
+                }}
+                // inactiveDotStyle={{
+                //   width: 10,
+                //   height: 10,
+                //   borderRadius: 5,
+                //   marginHorizontal: 0,
+                //   backgroundColor: "rgba(255, 255, 255, 0.8)",
+                // }}
+              />
+            );
+          }}
+        />
 
         <View style={styles.footerContainer}>
           <Text numberOfLines={1} ellipsizeMode="tail" style={styles.title}>
@@ -147,7 +181,7 @@ const styles = StyleSheet.create({
     textTransform: "uppercase",
   },
   description: {
-    color: colors.secondary,
+    color: colors.primary,
     fontSize: 10,
     fontWeight: "400",
     marginTop: 10,

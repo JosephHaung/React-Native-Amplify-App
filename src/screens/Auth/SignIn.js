@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useRef } from "react";
 import {
   View,
   Text,
@@ -17,11 +17,12 @@ import { SafeAreaView } from "react-native-safe-area-context";
 import colors from "../../theme/colors";
 import { AntDesign } from "@expo/vector-icons";
 
-export default function SignIn() {
-  const [email, setEmail] = useState("");
+export default function SignIn({ route }) {
+  const [email, setEmail] = useState(route?.params?.username);
   const [password, setPassword] = useState("");
   const navigation = useNavigation();
   const [errorMessage, setErrorMessage] = useState(null);
+  const passwordInput = useRef();
 
   const signIn = async () => {
     try {
@@ -82,6 +83,11 @@ export default function SignIn() {
           autoCapitalize="none"
           textContentType="emailAddress"
           leftIcon={"email-outline"}
+          returnKeyType="next"
+          onSubmitEditing={() => {
+            passwordInput.current.focus();
+          }}
+          blurOnSubmit={false}
         />
         <AppTextInput
           value={password}
@@ -94,6 +100,7 @@ export default function SignIn() {
           secureTextEntry={true}
           textContentType="password"
           leftIcon={"lock"}
+          ref={passwordInput}
         />
         {errorMessage && (
           <Text style={{ fontSize: 14, color: "red", marginTop: 5 }}>

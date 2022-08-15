@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import Modal from "react-native-modal";
 import {
   Text,
@@ -13,8 +13,26 @@ import {
 import { useNavigation } from "@react-navigation/native";
 import AppButton from "./AppButton";
 
-export default ({ open, setOpen, status, setStatus, children, onSubmit }) => {
+export default ({ open, setOpen, children, onSubmit }) => {
   const navigation = useNavigation();
+  const [status, setStatus] = useState(0);
+
+  const onPressConfirm = async () => {
+    setStatus(1);
+    try {
+      await onSubmit();
+      setStatus(2);
+    } catch (error) {
+      setStatus(3);
+    }
+  };
+
+  const onPressFail = () => {
+    setOpen(false);
+    setTimeout(() => {
+      setStatus(0);
+    }, 500);
+  };
 
   const render = () => {
     switch (status) {
@@ -33,12 +51,12 @@ export default ({ open, setOpen, status, setStatus, children, onSubmit }) => {
             >
               <AppButton
                 title="取消"
-                onPress={() => setOpen(false)}
+                onPress={onPressFail}
                 style={{ width: "40%", marginRight: "2%" }}
               />
               <AppButton
                 title="確認"
-                onPress={onSubmit}
+                onPress={onPressConfirm}
                 style={{ width: "40%", marginLeft: "2%" }}
               />
             </View>
@@ -100,9 +118,7 @@ export default ({ open, setOpen, status, setStatus, children, onSubmit }) => {
             <AppButton
               title="確認"
               style={{ width: "80%", marginBottom: 10 }}
-              onPress={() => {
-                setOpen(false);
-              }}
+              onPress={onPressFail}
             />
           </View>
         );
@@ -110,12 +126,7 @@ export default ({ open, setOpen, status, setStatus, children, onSubmit }) => {
   };
 
   return (
-    <Modal
-      isVisible={open}
-      onBackdropPress={() => {
-        setOpen(false);
-      }}
-    >
+    <Modal isVisible={open} onBackdropPress={onPressFail}>
       <View style={styles.modalContainer}>{render()}</View>
     </Modal>
   );

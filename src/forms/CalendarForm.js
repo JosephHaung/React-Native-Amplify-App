@@ -19,8 +19,10 @@ import colors from "../theme/colors";
 import Modal from "react-native-modal";
 import { useNavigation } from "@react-navigation/native";
 import AppModal from "../components/AppModal";
+import * as mutations from "../graphql/mutations";
+import { API } from "aws-amplify";
 
-export default function AppForm() {
+export default function AppForm({ route }) {
   const {
     control,
     handleSubmit,
@@ -40,6 +42,7 @@ export default function AppForm() {
   const [selectedDate, setSelectedDate] = useState(
     new Date().toISOString().split("T")[0]
   );
+  const { user, event, formData } = route?.params;
 
   const getUpComingEvents = async () => {
     try {
@@ -86,31 +89,6 @@ export default function AppForm() {
     } catch (error) {
       console.log(error);
     }
-  };
-
-  const onSubmit = async (row) => {
-    let arr = [];
-    for (let key in row) {
-      switch (typeof row[key]) {
-        case "string":
-          arr.push({
-            userEnteredValue: {
-              stringValue: row[key],
-            },
-          });
-          break;
-        case "number":
-          arr.push({
-            userEnteredValue: {
-              numberValue: row[key],
-            },
-          });
-          break;
-        default:
-      }
-    }
-    row = { values: arr };
-    // getTokenAndSubmitToSheets([row], 263936640);
   };
 
   const getMarkedDates = (items) => {
@@ -183,7 +161,13 @@ export default function AppForm() {
               }}
             >
               {availableEvents[selectedDate].map((e) => (
-                <AgendaItem key={e.id} item={e} />
+                <AgendaItem
+                  key={e.id}
+                  item={e}
+                  user={user}
+                  formData={formData}
+                  event={event}
+                />
               ))}
             </View>
           </ScrollView>
@@ -198,60 +182,69 @@ export default function AppForm() {
 }
 
 const AgendaItem = (props) => {
-  const { item } = props;
+  const { item, formData, event, user } = props;
   const [modalVisible, setModalVisible] = useState(false);
   const [status, setStatus] = useState(0);
 
   const onSubmit = async () => {
-    try {
-      setStatus(1);
-      const token = await getToken();
-      const del = await fetch(
-        `https://www.googleapis.com/calendar/v3/calendars/${CALENDAR_ID}/events/${item.id}`,
-        {
-          method: "DELETE",
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        }
-      );
-      const res = await fetch(
-        `https://timetreeapis.com/calendars/${TIMETREE_CALENDAR_ID}/events`,
-        {
-          method: "POST",
-          headers: {
-            Authorization: `Bearer ${TIMETREE_ACCESS_TOKEN}`,
-            Accept: "application/vnd.timetree.v1+json",
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify({
-            data: {
-              attributes: {
-                title: `User – ${item.summary}`,
-                category: "schedule",
-                start_at: item.start.dateTime,
-                start_timezone: item.start.timeZone,
-                end_at: item.end.dateTime,
-                end_timezone: item.end.timeZone,
-                all_day: false,
-              },
-              relationships: {
-                label: {
-                  data: {
-                    id: "1",
-                    type: "label",
-                  },
+    const formDataWithDate = {
+      date: item.date,
+      startTime: item.start.dateTime,
+      endTime: item.end.dateTime,
+      ...formData,
+    };
+    const token = await getToken();
+    const del = await fetch(
+      `https://www.googleapis.com/calendar/v3/calendars/${CALENDAR_ID}/events/${item.id}`,
+      {
+        method: "DELETE",
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      }
+    );
+    const res = await fetch(
+      `https://timetreeapis.com/calendars/${TIMETREE_CALENDAR_ID}/events`,
+      {
+        method: "POST",
+        headers: {
+          Authorization: `Bearer ${TIMETREE_ACCESS_TOKEN}`,
+          Accept: "application/vnd.timetree.v1+json",
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          data: {
+            attributes: {
+              title: `User – ${item.summary}`,
+              category: "schedule",
+              start_at: item.start.dateTime,
+              start_timezone: item.start.timeZone,
+              end_at: item.end.dateTime,
+              end_timezone: item.end.timeZone,
+              all_day: false,
+            },
+            relationships: {
+              label: {
+                data: {
+                  id: "1",
+                  type: "label",
                 },
               },
             },
-          }),
-        }
-      );
-      setStatus(2);
-    } catch (error) {
-      console.log(error);
-      setStatus(3);
-    }
+          },
+        }),
+      }
+    );
+    const res2 = await API.graphql({
+      query: mutations.createRegistration,
+      variables: {
+        input: {
+          data: JSON.stringify(formDataWithDate),
+          registrationEventId: event.id,
+          email: user.attributes.email,
+        },
+      },
+    });
   };
 
   return (

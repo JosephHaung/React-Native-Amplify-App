@@ -7,7 +7,8 @@ export type AmplifyDependentResourcesAttributes = {
             "UserPoolArn": "string",
             "UserPoolName": "string",
             "AppClientIDWeb": "string",
-            "AppClientID": "string"
+            "AppClientID": "string",
+            "FacebookWebClient": "string"
         }
     },
     "api": {
@@ -42,7 +43,7 @@ export type AmplifyDependentResourcesAttributes = {
         }
     },
     "storage": {
-        "s3awesomeprojectstorageef001036": {
+        "storage": {
             "BucketName": "string",
             "Region": "string"
         }

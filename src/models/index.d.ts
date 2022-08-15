@@ -24,6 +24,10 @@ type NewsMetaData = {
   readOnlyFields: 'createdAt' | 'updatedAt';
 }
 
+type RegistrationMetaData = {
+  readOnlyFields: 'createdAt' | 'updatedAt';
+}
+
 export declare class Items {
   readonly id: string;
   readonly title: string;
@@ -46,4 +50,16 @@ export declare class News {
   readonly updatedAt?: string | null;
   constructor(init: ModelInit<News, NewsMetaData>);
   static copyOf(source: News, mutator: (draft: MutableModel<News, NewsMetaData>) => MutableModel<News, NewsMetaData> | void): News;
+}
+
+export declare class Registration {
+  readonly id: string;
+  readonly data: string;
+  readonly event: Items;
+  readonly email: string;
+  readonly createdAt?: string | null;
+  readonly updatedAt?: string | null;
+  readonly registrationEventId: string;
+  constructor(init: ModelInit<Registration, RegistrationMetaData>);
+  static copyOf(source: Registration, mutator: (draft: MutableModel<Registration, RegistrationMetaData>) => MutableModel<Registration, RegistrationMetaData> | void): Registration;
 }

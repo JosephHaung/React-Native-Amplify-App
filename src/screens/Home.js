@@ -54,39 +54,43 @@ export default Home = () => {
     }
   };
   const navigation = useNavigation();
-  async function signOut() {
-    try {
-      await Auth.signOut();
-      setUser(null);
-    } catch (error) {
-      console.log("error signing out: ", error);
-    }
-  }
 
   const PAGES = [
     {
       name: "REHAB",
       icon: <AntDesign name="tool" size={30} color={"#fff"} />,
+      bgColor: colors.primary,
+      textColor: colors.secondary,
     },
     {
-      name: "JOBPROMOTION",
+      name: "JOB_PROMOTION",
       icon: <AntDesign name="tool" size={30} color={"#fff"} />,
+      bgColor: colors.secondary,
+      textColor: colors.primary,
     },
     {
-      name: "HEARINGCARE",
+      name: "HEARING_CARE",
       icon: <AntDesign name="tool" size={30} color={"#fff"} />,
+      bgColor: colors.secondary,
+      textColor: colors.primary,
     },
     {
-      name: "HEARINGASSESSMENT",
+      name: "HEARING_ASSESSMENT",
       icon: <AntDesign name="tool" size={30} color={"#fff"} />,
+      bgColor: colors.primary,
+      textColor: colors.secondary,
     },
     {
-      name: "HEARINGTRY",
+      name: "HEARING_TRY",
       icon: <AntDesign name="tool" size={30} color={"#fff"} />,
+      bgColor: colors.primary,
+      textColor: colors.secondary,
     },
     {
       name: "CONTACT",
       icon: <AntDesign name="tool" size={30} color={"#fff"} />,
+      bgColor: colors.secondary,
+      textColor: colors.primary,
     },
   ];
 
@@ -122,20 +126,31 @@ export default Home = () => {
         <AppTile
           title={pageNames[page.name]}
           onPress={() =>
-            navigation.navigate("AppDetailPage", { user, pageName: page.name })
+            page.name === "CONTACT"
+              ? navigation.navigate("Contact")
+              : navigation.navigate("AppDetailPage", {
+                  user,
+                  pageName: page.name,
+                })
           }
           icon={page.icon}
+          bgColor={page.bgColor}
+          textColor={page.textColor}
+          key={page.name}
         />
       ))}
     </View>
   );
 };
 
-const AppTile = ({ icon, onPress, title }) => {
+const AppTile = ({ icon, onPress, title, bgColor, textColor }) => {
   return (
-    <TouchableOpacity onPress={onPress} style={styles.tileContainer}>
+    <TouchableOpacity
+      onPress={onPress}
+      style={[styles.tileContainer, { backgroundColor: bgColor }]}
+    >
       {icon}
-      <Text style={styles.tileText}>{title}</Text>
+      <Text style={[styles.tileText, { color: textColor }]}>{title}</Text>
     </TouchableOpacity>
   );
 };
@@ -150,6 +165,7 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     flexWrap: "wrap",
     backgroundColor: colors.background,
+    alignContent: "center",
   },
   tileContainer: {
     width: TILE_SIZE,
@@ -163,7 +179,7 @@ const styles = StyleSheet.create({
       width: 3,
       height: 7,
     },
-    shadowOpacity: 0.7,
+    shadowOpacity: 0.5,
     shadowRadius: 4.59,
     elevation: 5,
     marginHorizontal: "3%",

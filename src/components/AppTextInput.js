@@ -1,8 +1,12 @@
 import React from "react";
 import { View, StyleSheet, TextInput } from "react-native";
 import { MaterialCommunityIcons } from "@expo/vector-icons";
+import react from "react";
 
-export default function AppTextInput({ leftIcon, ...otherProps }) {
+const AppTextInputComponent = function AppTextInput(
+  { leftIcon, ...otherProps },
+  ref
+) {
   return (
     <View style={styles.container}>
       {leftIcon && (
@@ -16,11 +20,15 @@ export default function AppTextInput({ leftIcon, ...otherProps }) {
       <TextInput
         style={styles.input}
         placeholderTextColor="#6e6869"
+        ref={ref}
         {...otherProps}
       />
     </View>
   );
-}
+};
+
+export default React.forwardRef(AppTextInputComponent);
+
 const styles = StyleSheet.create({
   container: {
     backgroundColor: "#f9f9f9",

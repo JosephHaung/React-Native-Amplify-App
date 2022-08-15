@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useRef } from "react";
 import {
   View,
   Text,
@@ -21,6 +21,10 @@ export default SignIn = () => {
   const [confirmPassword, setConfirmPassword] = useState("");
   const [name, setName] = useState("");
   const [errorMessage, setErrorMessage] = useState(null);
+  const phoneInput = useRef();
+  const nameInput = useRef();
+  const passwordInput = useRef();
+  const confirmPasswordInput = useRef();
 
   const navigation = useNavigation();
 
@@ -90,6 +94,11 @@ export default SignIn = () => {
           autoCapitalize="none"
           textContentType="username"
           leftIcon="email-outline"
+          returnKeyType="next"
+          onSubmitEditing={() => {
+            phoneInput.current.focus();
+          }}
+          blurOnSubmit={false}
         />
         <AppTextInput
           value={number}
@@ -102,6 +111,12 @@ export default SignIn = () => {
           textContentType="telephoneNumber"
           keyboardType="number-pad"
           leftIcon="cellphone"
+          ref={phoneInput}
+          returnKeyType="next"
+          onSubmitEditing={() => {
+            nameInput.current.focus();
+          }}
+          blurOnSubmit={false}
         />
         <AppTextInput
           value={name}
@@ -113,6 +128,12 @@ export default SignIn = () => {
           autoCapitalize="none"
           textContentType="name"
           leftIcon="user"
+          ref={nameInput}
+          returnKeyType="next"
+          onSubmitEditing={() => {
+            passwordInput.current.focus();
+          }}
+          blurOnSubmit={false}
         />
         <AppTextInput
           value={password}
@@ -125,6 +146,12 @@ export default SignIn = () => {
           secureTextEntry
           textContentType="password"
           leftIcon="lock"
+          ref={passwordInput}
+          returnKeyType="next"
+          onSubmitEditing={() => {
+            confirmPasswordInput.current.focus();
+          }}
+          blurOnSubmit={false}
         />
         <AppTextInput
           value={confirmPassword}
@@ -137,6 +164,7 @@ export default SignIn = () => {
           secureTextEntry
           textContentType="password"
           leftIcon="lock"
+          ref={confirmPasswordInput}
         />
         {errorMessage && (
           <Text style={{ fontSize: 14, color: "red", marginTop: 5 }}>

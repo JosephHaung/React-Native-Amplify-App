@@ -3,8 +3,11 @@ import { View, Text, FlatList, StyleSheet } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import AppCard from "../components/AppCard";
 import { Items, Page, News } from "../models";
-import { DataStore, Storage } from "aws-amplify";
+import { DataStore, Storage, API } from "aws-amplify";
 import colors from "../theme/colors";
+import AWS from "aws-sdk";
+import { SECRET_KEY_ID, SECRET_ACCESS_KEY } from "@env";
+import { listItems } from "../graphql/queries";
 
 export default AppDetailPage = ({ route }) => {
   const renderItem = ({ item }) => (
@@ -16,13 +19,24 @@ export default AppDetailPage = ({ route }) => {
     const events = await DataStore.query(Items, (item) =>
       item.page("eq", Page[route.params.pageName])
     );
+    // const events = await API.graphql({ query: listItems });
+    console.log(events);
+    const s3 = new AWS.S3({
+      accessKeyId: SECRET_KEY_ID,
+      signatureVersion: "v4",
+      region: "us-east-1",
+      secretAccessKey: SECRET_ACCESS_KEY,
+    });
 
     for (let i = 0; i < events.length; i++) {
       let event = events[i];
       let imageURIs = [];
       for (let image of event.images) {
-        const imageUri = await Storage.get(image);
-        imageURIs.push({ uri: imageUri });
+        const uri = s3.getSignedUrl("getObject", {
+          Bucket: "awesomeprojectstorage232054-dev",
+          Key: "public/" + image,
+        });
+        imageURIs.push({ uri });
       }
       const eventUpdatedUri = { ...event, images: imageURIs };
       events[i] = eventUpdatedUri;

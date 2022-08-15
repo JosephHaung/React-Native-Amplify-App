@@ -1,13 +1,11 @@
 import React, { useState, useEffect } from "react";
-import { NavigationContainer } from "@react-navigation/native";
+import { NavigationContainer, StackActions } from "@react-navigation/native";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 
 import SignInScreen from "../screens/Auth/SignIn";
 import SignUpScreen from "../screens/Auth/SignUp";
-// import ConfirmEmailScreen from '../screens/ConfirmEmailScreen';
-// import ForgotPasswordScreen from '../screens/ForgotPasswordScreen';
-// import NewPasswordScreen from '../screens/NewPasswordScreen';
+import ResetPasswordScreen from "../screens/Auth/ResetPassword";
 import HomeScreen from "../screens/Home";
 import { Auth, Hub } from "aws-amplify";
 import { MaterialCommunityIcons } from "@expo/vector-icons";
@@ -21,6 +19,8 @@ import CalendarInfoForm from "../forms/CalendarInfoForm";
 import ContactScreen from "../screens/Contact";
 import AppDetailPageScreen from "../screens/AppDetailPage";
 import UserScreen from "../screens/User.js";
+import pageNames from "../pageName.js";
+import colors from "../theme/colors";
 
 const Stack = createNativeStackNavigator();
 // const Tab = createBottomTabNavigator();
@@ -74,13 +74,15 @@ const Navigation = () => {
       <Stack.Navigator
         screenOptions={{
           headerShown: true,
+          headerStyle: { backgroundColor: colors.secondary },
+          headerTintColor: "#000",
           //  tabBarActiveTintColor: MyTheme.colors.primary,
         }}
       >
         <Stack.Screen
           name="Home"
           component={HomeScreen}
-          options={{ headerShown: false }}
+          options={{ headerShown: false, headerTitle: "首頁" }}
           // options={{
           //   tabBarLabel: "首頁",
           //   tabBarIcon: ({ color, size }) => (
@@ -88,16 +90,41 @@ const Navigation = () => {
           //   ),
           // }}
         />
-        <Stack.Screen name="AppDetailPage" component={AppDetailPageScreen} />
+        <Stack.Screen
+          name="AppDetailPage"
+          component={AppDetailPageScreen}
+          options={({ route }) => ({
+            headerTitle: pageNames[route.params?.pageName],
+          })}
+        />
 
-        <Stack.Screen name="Contact" component={ContactScreen} />
+        <Stack.Screen
+          name="Contact"
+          component={ContactScreen}
+          options={{ title: pageNames["CONTACT"] }}
+        />
         <Stack.Screen name="User" component={UserScreen} />
 
         {/* Forms */}
-        <Stack.Screen name="AppForm" component={AppForm} />
-        <Stack.Screen name="CalendarForm" component={CalendarForm} />
-        <Stack.Screen name="CalendarInfoForm" component={CalendarInfoForm} />
-        <Stack.Screen name="HearingCareForm" component={HearingCareForm} />
+        <Stack.Screen
+          name="CalendarForm"
+          component={CalendarForm}
+          options={{ title: "選擇日期" }}
+        />
+        <Stack.Screen
+          name="CalendarInfoForm"
+          component={CalendarInfoForm}
+          options={({ route }) => {
+            return { headerTitle: route.params?.event.title };
+          }}
+        />
+        <Stack.Screen
+          name="HearingCareForm"
+          component={HearingCareForm}
+          options={({ route }) => {
+            return { headerTitle: route.params?.event.title };
+          }}
+        />
 
         {/* Auth Stack */}
         <Stack.Screen
@@ -118,6 +145,11 @@ const Navigation = () => {
         <Stack.Screen
           name="ForgotPassword"
           component={ForgotPasswordScreen}
+          options={{ headerShown: false }}
+        />
+        <Stack.Screen
+          name="ResetPassword"
+          component={ResetPasswordScreen}
           options={{ headerShown: false }}
         />
       </Stack.Navigator>

@@ -18,6 +18,7 @@ import DropDownPicker from "react-native-dropdown-picker";
 import { API } from "aws-amplify";
 import AppButton from "../components/AppButton";
 import AppModal from "../components/AppModal";
+import * as mutations from "../graphql/mutations";
 
 const SERVICES = [
   { id: 0, name: "聽力保健講座 (1小時，人數不限)" },
@@ -25,7 +26,7 @@ const SERVICES = [
   { id: 2, name: "聽損者聽力照護服務 (2小時，人數不限)" },
 ];
 
-export default function AppForm() {
+export default function HearingCareForm({ route }) {
   const {
     control,
     handleSubmit,
@@ -54,22 +55,26 @@ export default function AppForm() {
   const [open, setOpen] = useState(false);
 
   const onSubmit = async (data) => {
-    setStatus(1);
     const apiName = "sendEmail";
     const path = "/email";
-    try {
-      const res = await API.post(apiName, path, {
-        body: {
-          subject: "報名",
-          text: getFormattedData(),
+    const res = await API.post(apiName, path, {
+      body: {
+        subject: "報名",
+        text: getFormattedData(),
+      },
+      userEmail: route.params.user.attributes.email,
+    });
+
+    const res2 = await API.graphql({
+      query: mutations.createRegistration,
+      variables: {
+        input: {
+          data: JSON.stringify(data),
+          registrationEventId: route.params.event.id,
+          email: route.params.user.attributes.email,
         },
-      });
-      setStatus(2);
-      console.log(res);
-    } catch (error) {
-      console.log(error);
-      setStatus(3);
-    }
+      },
+    });
   };
 
   const getFormattedData = () => {
@@ -433,7 +438,7 @@ export default function AppForm() {
           setOpen={setOpen}
           status={status}
           setStatus={setStatus}
-          onSubmit={onSubmit}
+          onSubmit={handleSubmit(onSubmit)}
         >
           <Text style={{ fontSize: 14, fontWeight: "500", marginBottom: 15 }}>
             請確認提交內容

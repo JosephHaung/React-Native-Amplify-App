@@ -16,13 +16,7 @@
     "s3Key": {
       "Type": "String"
     },
-    "gmailClientId": {
-      "Type": "String"
-    },
-    "gmailClientSecret": {
-      "Type": "String"
-    },
-    "gmailRefreshToken": {
+    "secretsPathAmplifyAppId": {
       "Type": "String"
     }
   },
@@ -80,13 +74,70 @@
               "Ref": "AWS::Region"
             },
             "GMAIL_CLIENT_ID": {
-              "Ref": "gmailClientId"
+              "Fn::Join": [
+                "",
+                [
+                  {
+                    "Fn::Sub": [
+                      "/amplify/${appId}/${env}/AMPLIFY_${functionName}_",
+                      {
+                        "appId": {
+                          "Ref": "secretsPathAmplifyAppId"
+                        },
+                        "env": {
+                          "Ref": "env"
+                        },
+                        "functionName": "sendEmail"
+                      }
+                    ]
+                  },
+                  "GMAIL_CLIENT_ID"
+                ]
+              ]
             },
             "GMAIL_CLIENT_SECRET": {
-              "Ref": "gmailClientSecret"
+              "Fn::Join": [
+                "",
+                [
+                  {
+                    "Fn::Sub": [
+                      "/amplify/${appId}/${env}/AMPLIFY_${functionName}_",
+                      {
+                        "appId": {
+                          "Ref": "secretsPathAmplifyAppId"
+                        },
+                        "env": {
+                          "Ref": "env"
+                        },
+                        "functionName": "sendEmail"
+                      }
+                    ]
+                  },
+                  "GMAIL_CLIENT_SECRET"
+                ]
+              ]
             },
             "GMAIL_REFRESH_TOKEN": {
-              "Ref": "gmailRefreshToken"
+              "Fn::Join": [
+                "",
+                [
+                  {
+                    "Fn::Sub": [
+                      "/amplify/${appId}/${env}/AMPLIFY_${functionName}_",
+                      {
+                        "appId": {
+                          "Ref": "secretsPathAmplifyAppId"
+                        },
+                        "env": {
+                          "Ref": "env"
+                        },
+                        "functionName": "sendEmail"
+                      }
+                    ]
+                  },
+                  "GMAIL_REFRESH_TOKEN"
+                ]
+              ]
             }
           }
         },
@@ -182,6 +233,63 @@
           ]
         }
       }
+    },
+    "AmplifyFunctionSecretsPolicy": {
+      "Type": "AWS::IAM::Policy",
+      "Properties": {
+        "PolicyName": "amplify-function-secrets-policy",
+        "Roles": [
+          {
+            "Ref": "LambdaExecutionRole"
+          }
+        ],
+        "PolicyDocument": {
+          "Version": "2012-10-17",
+          "Statement": [
+            {
+              "Effect": "Allow",
+              "Action": [
+                "ssm:GetParameter",
+                "ssm:GetParameters"
+              ],
+              "Resource": {
+                "Fn::Join": [
+                  "",
+                  [
+                    "arn:aws:ssm:",
+                    {
+                      "Ref": "AWS::Region"
+                    },
+                    ":",
+                    {
+                      "Ref": "AWS::AccountId"
+                    },
+                    ":parameter",
+                    {
+                      "Fn::Sub": [
+                        "/amplify/${appId}/${env}/AMPLIFY_${functionName}_",
+                        {
+                          "appId": {
+                            "Ref": "secretsPathAmplifyAppId"
+                          },
+                          "env": {
+                            "Ref": "env"
+                          },
+                          "functionName": "sendEmail"
+                        }
+                      ]
+                    },
+                    "*"
+                  ]
+                ]
+              }
+            }
+          ]
+        }
+      },
+      "DependsOn": [
+        "LambdaExecutionRole"
+      ]
     }
   },
   "Outputs": {

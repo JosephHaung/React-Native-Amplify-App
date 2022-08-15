@@ -16,7 +16,7 @@ import AppButton from "../components/AppButton";
 import AppModal from "../components/AppModal";
 import { useNavigation } from "@react-navigation/native";
 
-export default function AppForm() {
+export default function AppForm({ route }) {
   const {
     control,
     handleSubmit,
@@ -36,9 +36,14 @@ export default function AppForm() {
   const [status, setStatus] = useState(0);
   const [open, setOpen] = useState(false);
   const navigation = useNavigation();
+  const { user, event } = route.params;
 
   const onSubmit = async (data) => {
-    navigation.navigate("CalendarForm", { formData: data });
+    navigation.navigate("CalendarForm", {
+      formData: data,
+      user: user,
+      event: event,
+    });
   };
 
   const getFormattedData = () => {

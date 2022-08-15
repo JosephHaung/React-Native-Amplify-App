@@ -92,7 +92,7 @@
     }
   },
   "storage": {
-    "s3awesomeprojectstorageef001036": {
+    "storage": {
       "service": "S3",
       "providerPlugin": "awscloudformation",
       "dependsOn": []
