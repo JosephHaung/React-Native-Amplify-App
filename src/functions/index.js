@@ -20,7 +20,7 @@ export const getToken = async () => {
     const { access_token } = await res.json();
     return access_token;
   } catch (error) {
-    console.log(error);
+    console.log(error.response);
   }
 };
 

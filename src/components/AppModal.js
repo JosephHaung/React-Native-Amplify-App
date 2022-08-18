@@ -23,6 +23,7 @@ export default ({ open, setOpen, children, onSubmit }) => {
       await onSubmit();
       setStatus(2);
     } catch (error) {
+      console.log(error);
       setStatus(3);
     }
   };

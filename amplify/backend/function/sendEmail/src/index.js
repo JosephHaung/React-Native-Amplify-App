@@ -44,8 +44,8 @@ exports.handler = async (event) => {
   // };
   const body = JSON.parse(event.body);
   const mailData = {
-    from: "joseph.hhj@gmail.com",
-    to: ["joseph.hhj@gmail.com", event.userEmail],
+    from: "重聽福利協會 <joseph.hhj@gmail.com>",
+    to: ["joseph.hhj@gmail.com", event.email],
     subject: body.subject,
     text: body.text,
   };

@@ -171,7 +171,7 @@ const styles = StyleSheet.create({
     shadowOpacity: 0.2,
     shadowRadius: 5.62,
     elevation: 7,
-    width: "85%",
+    width: "90%",
     backgroundColor: colors.background,
   },
   title: {

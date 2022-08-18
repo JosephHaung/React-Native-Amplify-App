@@ -10,7 +10,6 @@ import {
 } from "react-native";
 import { useForm, Controller } from "react-hook-form";
 import AppTextInput from "../components/AppTextInput";
-import { getTokenAndSubmitToSheets } from "../functions";
 import colors from "../theme/colors";
 import Checkbox from "expo-checkbox";
 import DateTimePicker from "@react-native-community/datetimepicker";
@@ -19,6 +18,7 @@ import { API } from "aws-amplify";
 import AppButton from "../components/AppButton";
 import AppModal from "../components/AppModal";
 import * as mutations from "../graphql/mutations";
+import { MaterialCommunityIcons } from "@expo/vector-icons";
 
 const SERVICES = [
   { id: 0, name: "聽力保健講座 (1小時，人數不限)" },
@@ -60,7 +60,7 @@ export default function HearingCareForm({ route }) {
     const res = await API.post(apiName, path, {
       body: {
         subject: "報名",
-        text: getFormattedData(),
+        text: getFormattedData()[1],
       },
       userEmail: route.params.user.attributes.email,
     });
@@ -84,7 +84,38 @@ export default function HearingCareForm({ route }) {
       services += SERVICES[id].name;
       services += " ";
     }
-    const formatted = `
+    const formattedReact = (
+      <View style={{ alignItems: "center", marginHorizontal: 20 }}>
+        <Text style={styles.keyText}>機構或單位名稱</Text>
+        <Text style={styles.valueText}>{data.orgName}</Text>
+        <Text style={styles.keyText}>承辦人姓名、職稱</Text>
+        <Text style={styles.valueText}>{data.agentName}</Text>
+        <Text style={styles.keyText}>聯絡電話</Text>
+        <Text style={styles.valueText}>{data.phoneNumber}</Text>
+        <Text style={styles.keyText}>聯絡Email</Text>
+        <Text style={styles.valueText}>{data.email}</Text>
+        <Text style={styles.keyText}>服務需求</Text>
+        <Text style={styles.valueText}>{services}</Text>
+        <Text style={styles.keyText}>預計辦理時程（志願一）</Text>
+        <Text style={styles.valueText}>
+          {data.date1.toISOString().substring(0, 10)}
+          {data.apm1 === "am" ? "上午" : "下午"}
+        </Text>
+        <Text style={styles.keyText}>預計辦理時程（志願二）</Text>
+        <Text style={styles.valueText}>
+          {data.date2.toISOString().substring(0, 10)}
+          {data.apm2 === "am" ? "上午" : "下午"}
+        </Text>
+        <Text style={styles.keyText}>預計辦理時程（志願三）</Text>
+        <Text style={styles.valueText}>
+          {data.date3.toISOString().substring(0, 10)}
+          {data.apm3 === "am" ? "上午" : "下午"}
+        </Text>
+      </View>
+    );
+    const formattedHTML = `
+您已成功報名${route.params.event.name}，以下為提交內容：
+
 機構或單位名稱：${data.orgName}
 承辦人姓名、職稱：${data.agentName}
 聯絡電話：${data.phoneNumber}
@@ -99,8 +130,10 @@ export default function HearingCareForm({ route }) {
 預計辦理時程（志願三）：${data.date3.toISOString().substring(0, 10)} ${
       data.apm3 === "am" ? "上午" : "下午"
     }
+
+若有疑問，請email協會
     `;
-    return formatted;
+    return [formattedReact, formattedHTML];
   };
 
   const handleCheck = (checkedId) => {
@@ -136,6 +169,9 @@ export default function HearingCareForm({ route }) {
 
           <Controller
             control={control}
+            rules={{
+              required: true,
+            }}
             render={({ field: { onChange, onBlur, value } }) => (
               <AppTextInput
                 onBlur={onBlur}
@@ -148,6 +184,9 @@ export default function HearingCareForm({ route }) {
           />
           <Controller
             control={control}
+            rules={{
+              required: true,
+            }}
             render={({ field: { onChange, onBlur, value } }) => (
               <AppTextInput
                 onBlur={onBlur}
@@ -160,6 +199,9 @@ export default function HearingCareForm({ route }) {
           />
           <Controller
             control={control}
+            rules={{
+              required: true,
+            }}
             render={({ field: { onChange, onBlur, value } }) => (
               <AppTextInput
                 onBlur={onBlur}
@@ -172,6 +214,9 @@ export default function HearingCareForm({ route }) {
           />
           <Controller
             control={control}
+            rules={{
+              required: true,
+            }}
             render={({ field: { onChange, onBlur, value } }) => (
               <AppTextInput
                 onBlur={onBlur}
@@ -188,6 +233,9 @@ export default function HearingCareForm({ route }) {
 
           <Controller
             control={control}
+            rules={{
+              required: true,
+            }}
             render={({ field: { onChange, onBlur, value } }) =>
               SERVICES.map((service) => (
                 <View
@@ -207,9 +255,9 @@ export default function HearingCareForm({ route }) {
                   />
                   <Text
                     style={{
-                      fontSize: 18,
+                      fontSize: 16,
                       marginLeft: 10,
-                      color: colors.primary,
+                      color: "#000",
                     }}
                   >
                     {service.name}
@@ -427,7 +475,17 @@ export default function HearingCareForm({ route }) {
           </View>
         </View>
       </ScrollView>
-      <View style={{ padding: 20, backgroundColor: colors.background }}>
+      <View
+        style={{
+          paddingTop: 15,
+          paddingBottom: 20,
+          paddingHorizontal: 20,
+          backgroundColor: colors.background,
+        }}
+      >
+        {Object.keys(errors).length !== 0 && (
+          <Text style={styles.errorText}>所有欄位皆為必填</Text>
+        )}
         <AppButton
           title="提交"
           onPress={handleSubmit(() => setOpen(true))}
@@ -440,21 +498,34 @@ export default function HearingCareForm({ route }) {
           setStatus={setStatus}
           onSubmit={handleSubmit(onSubmit)}
         >
-          <Text style={{ fontSize: 14, fontWeight: "500", marginBottom: 15 }}>
-            請確認提交內容
-          </Text>
+          <View
+            style={{
+              flexDirection: "row",
+              marginBottom: 30,
+              borderBottomWidth: 1.5,
+            }}
+          >
+            <MaterialCommunityIcons
+              name="pencil-outline"
+              size={25}
+              color="black"
+              style={{ marginRight: 5 }}
+            />
+            <Text style={{ fontWeight: "700", fontSize: 20 }}>
+              請確認資料正確無誤
+            </Text>
+          </View>
           <Text
             style={{
               fontSize: 16,
               fontWeight: "500",
-              textAlign: "left",
-              alignSelf: "flex-start",
+              // textAlign: "left",
+              // alignSelf: "flex-start",
               //width: "100%",
-              marginLeft: 50,
               lineHeight: 25,
             }}
           >
-            {getFormattedData()}
+            {getFormattedData()[0]}
           </Text>
         </AppModal>
       </View>
@@ -482,5 +553,21 @@ const styles = StyleSheet.create({
     padding: 20,
     backgroundColor: colors.background,
     marginBottom: 20,
+  },
+  errorText: {
+    fontSize: 14,
+    color: "red",
+    marginBottom: 15,
+    alignSelf: "center",
+  },
+  keyText: {
+    fontSize: 16,
+    fontWeight: "700",
+  },
+  valueText: {
+    marginTop: 5,
+    marginBottom: 20,
+    fontWeight: "400",
+    textAlign: "center",
   },
 });

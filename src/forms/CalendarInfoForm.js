@@ -72,6 +72,17 @@ export default function AppForm({ route }) {
     return formatted;
   };
 
+  const onPressLink = async () => {
+    try {
+      await WebBrowser.openBrowserAsync(
+        "https://tpap.taipei/app37/cognitionView/taipeicentercategory"
+      );
+    } catch (err) {
+      Alert.alert("錯誤");
+      console.log(err);
+    }
+  };
+
   return (
     <View
       style={{
@@ -163,6 +174,29 @@ export default function AppForm({ route }) {
             )}
             name="lineId"
           />
+        </View>
+        <View style={styles.section}>
+          <Text style={styles.sectionTitleText}>評估9號報告書</Text>
+          <Text
+            style={{
+              marginLeft: 10,
+              fontSize: 16,
+              fontWeight: "400",
+              lineHeight: 24,
+            }}
+          >
+            必須先向輔具中心登記，
+            <Text
+              onPress={onPressLink}
+              style={{ textDecorationLine: "underline" }}
+            >
+              所屬輔具中心查詢
+            </Text>
+            {"\n"}
+            1. 身分證(若無身分證請攜帶戶口名簿){"\n"}
+            2. 身障手冊{"\n"}
+            3. 印章（無法簽名者請攜帶）
+          </Text>
         </View>
       </ScrollView>
       <View style={{ padding: 20, backgroundColor: colors.background }}>

@@ -26,7 +26,7 @@
         },
         "sendEmail": {
           "deploymentBucketName": "amplify-awesomeproject-dev-232054-deployment",
-          "s3Key": "amplify-builds/sendEmail-44562b7975336f415941-build.zip",
+          "s3Key": "amplify-builds/sendEmail-7a71654159546a544b4b-build.zip",
           "secretsPathAmplifyAppId": "dx2f4wizxe0bo"
         }
       }
