@@ -17,6 +17,7 @@ import { Registration, SignUpMethod } from "../models";
 import { DataStore } from "aws-amplify";
 import { Feather } from "@expo/vector-icons";
 import Modal from "react-native-modal";
+import * as WebBrowser from "expo-web-browser";
 
 const ITEM_WIDTH = Dimensions.get("window").width * 0.85;
 
@@ -162,10 +163,24 @@ const Item = ({ item, setOpen, setContent }) => {
           </Text>
         </View>
       );
+    } else {
+      content = (
+        <View>
+          <Text>此活動透過 Google 表單填寫</Text>
+          <Text onPress={onPressLink}>點擊查看</Text>
+        </View>
+      );
     }
     setContent(content);
   };
-
+  const onPressLink = async () => {
+    try {
+      await WebBrowser.openBrowserAsync(formLink);
+    } catch (err) {
+      Alert.alert("連結已失效，請聯絡協會");
+      console.log(err);
+    }
+  };
   return (
     <View style={styles.itemContainer}>
       <View style={{ flexDirection: "column" }}>

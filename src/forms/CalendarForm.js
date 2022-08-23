@@ -49,10 +49,11 @@ export default function AppForm({ route }) {
       const token = await getToken();
       const now = new Date().toISOString();
       const twoWeeksLater = new Date();
+      const encodedTitle = encodeURI(event.title);
 
       twoWeeksLater.setDate(twoWeeksLater.getDate() + 14);
       const res = await fetch(
-        `https://www.googleapis.com/calendar/v3/calendars/${CALENDAR_ID}/events?timeMin=${now}&timeMax=${twoWeeksLater.toISOString()}&singleEvents=true`,
+        `https://www.googleapis.com/calendar/v3/calendars/${CALENDAR_ID}/events?q=${encodedTitle}&timeMin=${now}&timeMax=${twoWeeksLater.toISOString()}&singleEvents=true`,
         {
           method: "GET",
           headers: {
@@ -185,14 +186,26 @@ const AgendaItem = (props) => {
   const { item, formData, event, user } = props;
   const [modalVisible, setModalVisible] = useState(false);
   const [status, setStatus] = useState(0);
+  const formDataWithDate = {
+    date: item.date,
+    startTime: item.start.dateTime,
+    endTime: item.end.dateTime,
+    ...formData,
+  };
+
+  const getFormattedData = () => {
+    const formatted = `
+個案姓名：${formDataWithDate.name}
+出生年月日：${formDataWithDate.birthDate}
+聯絡人姓名：${formDataWithDate.contactName}
+與身障者關係：${formDataWithDate.relationship}
+聯絡電話：${formDataWithDate.phoneNumbe}
+Line ID：${formDataWithDate.lineId}
+    `;
+    return formatted;
+  };
 
   const onSubmit = async () => {
-    const formDataWithDate = {
-      date: item.date,
-      startTime: item.start.dateTime,
-      endTime: item.end.dateTime,
-      ...formData,
-    };
     const token = await getToken();
     const del = await fetch(
       `https://www.googleapis.com/calendar/v3/calendars/${CALENDAR_ID}/events/${item.id}`,
@@ -215,13 +228,14 @@ const AgendaItem = (props) => {
         body: JSON.stringify({
           data: {
             attributes: {
-              title: `User – ${item.summary}`,
+              title: `${formData.agentName} – ${item.summary}`,
               category: "schedule",
               start_at: item.start.dateTime,
               start_timezone: item.start.timeZone,
               end_at: item.end.dateTime,
               end_timezone: item.end.timeZone,
               all_day: false,
+              description: getFormattedData(),
             },
             relationships: {
               label: {

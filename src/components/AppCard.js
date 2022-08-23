@@ -54,7 +54,7 @@ export default function AppCard({ item, user }) {
         try {
           await WebBrowser.openBrowserAsync(formLink);
         } catch (err) {
-          Alert.alert("錯誤");
+          Alert.alert("連結已失效，請聯絡協會");
           console.log(err);
         }
     }

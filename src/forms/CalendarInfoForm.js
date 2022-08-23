@@ -46,32 +46,6 @@ export default function AppForm({ route }) {
     });
   };
 
-  const getFormattedData = () => {
-    const data = getValues();
-    let services = "";
-    for (let id of data.services) {
-      services += SERVICES[id].name;
-      services += " ";
-    }
-    const formatted = `
-機構或單位名稱：${data.orgName}
-承辦人姓名、職稱：${data.agentName}
-聯絡電話：${data.phoneNumber}
-聯絡Email：${data.email}
-服務需求：${services}
-預計辦理時程（志願一）：${data.date1.toISOString().substring(0, 10)} ${
-      data.apm1 === "am" ? "上午" : "下午"
-    }
-預計辦理時程（志願二）：${data.date2.toISOString().substring(0, 10)} ${
-      data.apm2 === "am" ? "上午" : "下午"
-    }
-預計辦理時程（志願三）：${data.date3.toISOString().substring(0, 10)} ${
-      data.apm3 === "am" ? "上午" : "下午"
-    }
-    `;
-    return formatted;
-  };
-
   const onPressLink = async () => {
     try {
       await WebBrowser.openBrowserAsync(
@@ -83,6 +57,60 @@ export default function AppForm({ route }) {
     }
   };
 
+  const getFormText = (title) => {
+    console.log(title);
+    if (title === "9號表評估") {
+      return (
+        <View style={styles.section}>
+          <Text style={styles.sectionTitleText}>評估9號報告書</Text>
+          <Text
+            style={{
+              marginLeft: 10,
+              fontSize: 16,
+              fontWeight: "400",
+              lineHeight: 24,
+            }}
+          >
+            必須先向輔具中心登記，
+            <Text
+              onPress={onPressLink}
+              style={{ textDecorationLine: "underline" }}
+            >
+              所屬輔具中心查詢
+            </Text>
+            {"\n"}
+            1. 身分證(若無身分證請攜帶戶口名簿){"\n"}
+            2. 身障手冊{"\n"}
+            3. 印章（無法簽名者請攜帶）
+          </Text>
+        </View>
+      );
+    } else if (title === "25號表評估") {
+      <View style={styles.section}>
+        <Text style={styles.sectionTitleText}>評估25號報告書</Text>
+        <Text
+          style={{
+            marginLeft: 10,
+            fontSize: 16,
+            fontWeight: "400",
+            lineHeight: 24,
+          }}
+        >
+          必須先向輔具中心登記，
+          <Text
+            onPress={onPressLink}
+            style={{ textDecorationLine: "underline" }}
+          >
+            所屬輔具中心查詢
+          </Text>
+          {"\n"}
+          1. 身分證(若無身分證請攜帶戶口名簿){"\n"}
+          2. 身障手冊{"\n"}
+          3. 印章（無法簽名者請攜帶）
+        </Text>
+      </View>;
+    }
+  };
   return (
     <View
       style={{
@@ -175,29 +203,7 @@ export default function AppForm({ route }) {
             name="lineId"
           />
         </View>
-        <View style={styles.section}>
-          <Text style={styles.sectionTitleText}>評估9號報告書</Text>
-          <Text
-            style={{
-              marginLeft: 10,
-              fontSize: 16,
-              fontWeight: "400",
-              lineHeight: 24,
-            }}
-          >
-            必須先向輔具中心登記，
-            <Text
-              onPress={onPressLink}
-              style={{ textDecorationLine: "underline" }}
-            >
-              所屬輔具中心查詢
-            </Text>
-            {"\n"}
-            1. 身分證(若無身分證請攜帶戶口名簿){"\n"}
-            2. 身障手冊{"\n"}
-            3. 印章（無法簽名者請攜帶）
-          </Text>
-        </View>
+        {getFormText(event.title)}
       </ScrollView>
       <View style={{ padding: 20, backgroundColor: colors.background }}>
         <AppButton

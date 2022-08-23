@@ -82,7 +82,7 @@ const Navigation = () => {
         <Stack.Screen
           name="Home"
           component={HomeScreen}
-          options={{ headerShown: false, headerTitle: "首頁" }}
+          options={{ headerShown: false, title: "首頁" }}
           // options={{
           //   tabBarLabel: "首頁",
           //   tabBarIcon: ({ color, size }) => (
@@ -95,15 +95,20 @@ const Navigation = () => {
           component={AppDetailPageScreen}
           options={({ route }) => ({
             headerTitle: pageNames[route.params?.pageName],
+            headerBackTitle: "首頁",
           })}
         />
 
         <Stack.Screen
           name="Contact"
           component={ContactScreen}
-          options={{ title: pageNames["CONTACT"] }}
+          options={{ title: pageNames["CONTACT"], headerBackTitle: "首頁" }}
         />
-        <Stack.Screen name="User" component={UserScreen} />
+        <Stack.Screen
+          name="User"
+          component={UserScreen}
+          options={{ title: "個人資料", headerBackTitle: "首頁" }}
+        />
 
         {/* Forms */}
         <Stack.Screen
