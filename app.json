@@ -1,7 +1,7 @@
 {
   "expo": {
     "name": "重聽福利協會",
-    "slug": "hearhardapp",
+    "slug": "HearHardApp",
     "version": "1.0.0",
     "orientation": "portrait",
     "icon": "./assets/icon.png",
@@ -18,7 +18,7 @@
     ],
     "ios": {
       "supportsTablet": true,
-      "bundleIdentifier": "org.hearhard.app"
+      "bundleIdentifier": "org.hearhard.hearhardapp"
     },
     "android": {
       "adaptiveIcon": {

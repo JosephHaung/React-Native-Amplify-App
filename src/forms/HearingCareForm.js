@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useRef } from "react";
 import {
   Text,
   View,
@@ -53,6 +53,9 @@ export default function HearingCareForm({ route }) {
   const [open3, setOpen3] = useState(false);
   const [status, setStatus] = useState(0);
   const [open, setOpen] = useState(false);
+  const agentNameInput = useRef();
+  const phoneNumberInput = useRef();
+  const emailInput = useRef();
 
   const onSubmit = async (data) => {
     const apiName = "sendEmail";
@@ -131,7 +134,7 @@ export default function HearingCareForm({ route }) {
       data.apm3 === "am" ? "上午" : "下午"
     }
 
-若有疑問，請email協會
+若有疑問，請回覆此郵件。
     `;
     return [formattedReact, formattedHTML];
   };
@@ -178,6 +181,9 @@ export default function HearingCareForm({ route }) {
                 onChangeText={onChange}
                 value={value}
                 placeholder="機構或單位名稱"
+                returnKeyType="next"
+                onSubmitEditing={() => agentNameInput.current.focus()}
+                blurOnSubmit={false}
               />
             )}
             name="orgName"
@@ -189,10 +195,14 @@ export default function HearingCareForm({ route }) {
             }}
             render={({ field: { onChange, onBlur, value } }) => (
               <AppTextInput
+                ref={agentNameInput}
                 onBlur={onBlur}
                 onChangeText={onChange}
                 value={value}
                 placeholder="承辦人姓名、職稱"
+                returnKeyType="next"
+                onSubmitEditing={() => phoneNumberInput.current.focus()}
+                blurOnSubmit={false}
               />
             )}
             name="agentName"
@@ -204,10 +214,14 @@ export default function HearingCareForm({ route }) {
             }}
             render={({ field: { onChange, onBlur, value } }) => (
               <AppTextInput
+                ref={phoneNumberInput}
                 onBlur={onBlur}
                 onChangeText={onChange}
                 value={value}
                 placeholder="聯絡電話"
+                returnKeyType="next"
+                onSubmitEditing={() => emailInput.current.focus()}
+                blurOnSubmit={false}
               />
             )}
             name="phoneNumber"
@@ -219,10 +233,12 @@ export default function HearingCareForm({ route }) {
             }}
             render={({ field: { onChange, onBlur, value } }) => (
               <AppTextInput
+                ref={emailInput}
                 onBlur={onBlur}
                 onChangeText={onChange}
                 value={value}
                 placeholder="聯絡Email"
+                returnKeyType="next"
               />
             )}
             name="email"

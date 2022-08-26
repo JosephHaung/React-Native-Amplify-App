@@ -194,15 +194,36 @@ const AgendaItem = (props) => {
   };
 
   const getFormattedData = () => {
-    const formatted = `
+    const formattedReact = (
+      <View style={{ alignItems: "center", marginHorizontal: 20 }}>
+        <Text style={styles.keyText}>個案姓名</Text>
+        <Text style={styles.valueText}>{formDataWithDate.name}</Text>
+        <Text style={styles.keyText}>出生年月日</Text>
+        <Text style={styles.valueText}>{formDataWithDate.birthDate}</Text>
+        <Text style={styles.keyText}>聯絡人姓名</Text>
+        <Text style={styles.valueText}>{formDataWithDate.contactName}</Text>
+        <Text style={styles.keyText}>與身障者關係</Text>
+        <Text style={styles.valueText}>{formDataWithDate.relationship}</Text>
+        <Text style={styles.keyText}>聯絡電話</Text>
+        <Text style={styles.valueText}>{formDataWithDate.phoneNumber}</Text>
+        <Text style={styles.keyText}>Line ID</Text>
+        <Text style={styles.valueText}>{formDataWithDate.lineId}</Text>
+        <Text style={styles.keyText}>選擇時段</Text>
+        <Text
+          style={styles.valueText}
+        >{`${formDataWithDate.date} ${formDataWithDate.startTime} - ${formDataWithDate.endTime}`}</Text>
+      </View>
+    );
+    const formattedText = `
 個案姓名：${formDataWithDate.name}
 出生年月日：${formDataWithDate.birthDate}
 聯絡人姓名：${formDataWithDate.contactName}
 與身障者關係：${formDataWithDate.relationship}
-聯絡電話：${formDataWithDate.phoneNumbe}
+聯絡電話：${formDataWithDate.phoneNumber}
 Line ID：${formDataWithDate.lineId}
+選擇時段：${formDataWithDate.date} ${formDataWithDate.startTime} - ${formDataWithDate.endTime}
     `;
-    return formatted;
+    return [formattedReact, formattedText];
   };
 
   const onSubmit = async () => {
@@ -235,7 +256,7 @@ Line ID：${formDataWithDate.lineId}
               end_at: item.end.dateTime,
               end_timezone: item.end.timeZone,
               all_day: false,
-              description: getFormattedData(),
+              description: getFormattedData()[1],
             },
             relationships: {
               label: {
@@ -259,6 +280,15 @@ Line ID：${formDataWithDate.lineId}
         },
       },
     });
+    const apiName = "sendEmail";
+    const path = "/email";
+    const res3 = await API.post(apiName, path, {
+      body: {
+        subject: "報名",
+        text: getFormattedData()[1],
+      },
+      userEmail: user.attributes.email,
+    });
   };
 
   return (
@@ -277,11 +307,32 @@ Line ID：${formDataWithDate.lineId}
         setStatus={setStatus}
         onSubmit={onSubmit}
       >
-        <Text style={{ fontSize: 14, fontWeight: "500", marginBottom: 15 }}>
-          您選擇的時段為
+        <View
+          style={{
+            flexDirection: "row",
+            marginBottom: 30,
+            borderBottomWidth: 1.5,
+          }}
+        >
+          <MaterialCommunityIcons
+            name="pencil-outline"
+            size={25}
+            color="black"
+            style={{ marginRight: 5 }}
+          />
+          <Text style={{ fontWeight: "700", fontSize: 20 }}>
+            請確認資料正確無誤
+          </Text>
+        </View>
+        <Text
+          style={{
+            fontSize: 16,
+            fontWeight: "500",
+            lineHeight: 25,
+          }}
+        >
+          {getFormattedData()[0]}
         </Text>
-        <Text style={{ fontSize: 16, fontWeight: "500" }}>{item.date}</Text>
-        <Text style={{ fontSize: 18, fontWeight: "700" }}>{item.title}</Text>
       </AppModal>
     </>
   );
@@ -344,5 +395,15 @@ const styles = StyleSheet.create({
   emptyItemText: {
     color: "lightgrey",
     fontSize: 14,
+  },
+  keyText: {
+    fontSize: 16,
+    fontWeight: "700",
+  },
+  valueText: {
+    marginTop: 5,
+    marginBottom: 20,
+    fontWeight: "400",
+    textAlign: "center",
   },
 });

@@ -30,6 +30,11 @@ export default SignIn = () => {
 
   const signUp = async () => {
     if (password !== confirmPassword) {
+      setErrorMessage("密碼不相同");
+      return;
+    }
+    if (!name) {
+      setErrorMessage("請輸入姓名");
       return;
     }
     try {

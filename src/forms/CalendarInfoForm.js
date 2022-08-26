@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useRef } from "react";
 import {
   Text,
   View,
@@ -37,6 +37,11 @@ export default function AppForm({ route }) {
   const [open, setOpen] = useState(false);
   const navigation = useNavigation();
   const { user, event } = route.params;
+  const phoneNumberInput = useRef();
+  const birthDateInput = useRef();
+  const contactNameInput = useRef();
+  const relationshipInput = useRef();
+  const lineIdInput = useRef();
 
   const onSubmit = async (data) => {
     navigation.navigate("CalendarForm", {
@@ -111,6 +116,7 @@ export default function AppForm({ route }) {
       </View>;
     }
   };
+
   return (
     <View
       style={{
@@ -129,71 +135,108 @@ export default function AppForm({ route }) {
       >
         <View style={styles.section}>
           <Text style={styles.sectionTitleText}>基本資料</Text>
-
           <Controller
             control={control}
+            rules={{
+              required: true,
+            }}
             render={({ field: { onChange, onBlur, value } }) => (
               <AppTextInput
                 onBlur={onBlur}
                 onChangeText={onChange}
                 value={value}
                 placeholder="個案姓名"
+                returnKeyType="next"
+                onSubmitEditing={() => birthDateInput.current.focus()}
+                blurOnSubmit={false}
               />
             )}
             name="name"
           />
           <Controller
             control={control}
+            rules={{
+              required: true,
+            }}
             render={({ field: { onChange, onBlur, value } }) => (
               <AppTextInput
+                ref={birthDateInput}
                 onBlur={onBlur}
                 onChangeText={onChange}
                 value={value}
                 placeholder="出生年月日"
+                returnKeyType="next"
+                onSubmitEditing={() => contactNameInput.current.focus()}
+                blurOnSubmit={false}
               />
             )}
             name="birthDate"
           />
           <Controller
             control={control}
+            rules={{
+              required: true,
+            }}
             render={({ field: { onChange, onBlur, value } }) => (
               <AppTextInput
+                ref={contactNameInput}
                 onBlur={onBlur}
                 onChangeText={onChange}
                 value={value}
                 placeholder="聯絡人姓名"
+                returnKeyType="next"
+                onSubmitEditing={() => relationshipInput.current.focus()}
+                blurOnSubmit={false}
               />
             )}
             name="contactName"
           />
           <Controller
             control={control}
+            rules={{
+              required: true,
+            }}
             render={({ field: { onChange, onBlur, value } }) => (
               <AppTextInput
+                ref={relationshipInput}
                 onBlur={onBlur}
                 onChangeText={onChange}
                 value={value}
                 placeholder="與身障者關係"
+                returnKeyType="next"
+                onSubmitEditing={() => phoneNumberInput.current.focus()}
+                blurOnSubmit={false}
               />
             )}
             name="relationship"
           />
           <Controller
             control={control}
+            rules={{
+              required: true,
+            }}
             render={({ field: { onChange, onBlur, value } }) => (
               <AppTextInput
+                ref={phoneNumberInput}
                 onBlur={onBlur}
                 onChangeText={onChange}
                 value={value}
                 placeholder="聯絡電話"
+                returnKeyType="next"
+                onSubmitEditing={() => lineIdInput.current.focus()}
+                blurOnSubmit={false}
               />
             )}
             name="phoneNumber"
           />
           <Controller
             control={control}
+            rules={{
+              required: true,
+            }}
             render={({ field: { onChange, onBlur, value } }) => (
               <AppTextInput
+                ref={lineIdInput}
                 onBlur={onBlur}
                 onChangeText={onChange}
                 value={value}
@@ -205,7 +248,17 @@ export default function AppForm({ route }) {
         </View>
         {getFormText(event.title)}
       </ScrollView>
-      <View style={{ padding: 20, backgroundColor: colors.background }}>
+      <View
+        style={{
+          paddingTop: 15,
+          paddingBottom: 20,
+          paddingHorizontal: 20,
+          backgroundColor: colors.background,
+        }}
+      >
+        {Object.keys(errors).length !== 0 && (
+          <Text style={styles.errorText}>所有欄位皆為必填</Text>
+        )}
         <AppButton
           title="提交"
           onPress={handleSubmit(onSubmit)}
@@ -236,5 +289,11 @@ const styles = StyleSheet.create({
     padding: 20,
     backgroundColor: colors.background,
     marginBottom: 20,
+  },
+  errorText: {
+    fontSize: 14,
+    color: "red",
+    marginBottom: 15,
+    alignSelf: "center",
   },
 });
