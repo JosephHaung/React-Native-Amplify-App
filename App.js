@@ -1,5 +1,11 @@
 import { StatusBar } from "expo-status-bar";
-import { StyleSheet, Text, View, KeyboardAvoidingView } from "react-native";
+import {
+  StyleSheet,
+  Text,
+  View,
+  KeyboardAvoidingView,
+  Platform,
+} from "react-native";
 import { Amplify } from "aws-amplify";
 import awsconfig from "./src/aws-exports";
 import Navigation from "./src/navigation";
@@ -9,7 +15,10 @@ Amplify.configure(awsconfig);
 function App() {
   return (
     <SafeAreaProvider>
-      <KeyboardAvoidingView behavior="padding" style={{ flex: 1 }}>
+      <KeyboardAvoidingView
+        behavior={Platform.OS === "ios" ? "padding" : "height"}
+        style={{ flex: 1 }}
+      >
         <Navigation />
       </KeyboardAvoidingView>
     </SafeAreaProvider>

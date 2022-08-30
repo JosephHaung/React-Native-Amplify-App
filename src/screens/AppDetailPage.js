@@ -20,28 +20,29 @@ export default AppDetailPage = ({ route }) => {
       item.page("eq", Page[route.params.pageName])
     );
     // const events = await API.graphql({ query: listItems });
-    console.log(events);
-    const s3 = new AWS.S3({
-      accessKeyId: SECRET_KEY_ID,
-      signatureVersion: "v4",
-      region: "us-east-1",
-      secretAccessKey: SECRET_ACCESS_KEY,
-    });
+    // const s3 = new AWS.S3({
+    //   accessKeyId: SECRET_KEY_ID,
+    //   signatureVersion: "v4",
+    //   region: "us-east-1",
+    //   secretAccessKey: SECRET_ACCESS_KEY,
+    // });
 
     for (let i = 0; i < events.length; i++) {
       let event = events[i];
       let imageURIs = [];
       for (let image of event.images) {
-        const uri = s3.getSignedUrl("getObject", {
-          Bucket: "awesomeprojectstorage232054-dev",
-          Key: "public/" + image,
+        // const uri = s3.getSignedUrl("getObject", {
+        //   Bucket: "awesomeprojectstorage232054-dev",
+        //   Key: "public/" + image,
+        // });
+        const uri = await Storage.get(image, {
+          level: "public",
         });
         imageURIs.push({ uri });
       }
       const eventUpdatedUri = { ...event, images: imageURIs };
       events[i] = eventUpdatedUri;
     }
-    console.log(events);
     setEvents(events);
   }, []);
 

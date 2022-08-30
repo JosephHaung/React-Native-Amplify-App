@@ -1,4 +1,5 @@
 {
-  "body": "{\"subject\": \"報名\", \"text\": \"a\"}",
-  "email": "alpschen05@gmail.com"
+  "body": "{\"email\":\"alpschen05@gmail.com\"}",
+  "key2": "value2",
+  "key3": "value3"
 }

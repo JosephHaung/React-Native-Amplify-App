@@ -2,7 +2,7 @@
   "AppSyncApiName": "news",
   "DynamoDBBillingMode": "PAY_PER_REQUEST",
   "DynamoDBEnableServerSideEncryption": false,
-  "AuthModeLastUpdated": "2022-08-12T17:11:52.415Z",
+  "AuthModeLastUpdated": "2022-08-26T21:21:07.275Z",
   "CreateAPIKey": 1,
   "authRoleName": {
     "Ref": "AuthRoleName"

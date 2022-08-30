@@ -27,7 +27,7 @@ export default ConfirmSignUp = ({ route }) => {
       navigation.navigate("Home");
     } catch (error) {
       console.log("error signing up", error);
-      setErrorMessage("驗證失敗");
+      setErrorMessage("驗證失敗，請輸入最新驗證碼");
     }
   };
 

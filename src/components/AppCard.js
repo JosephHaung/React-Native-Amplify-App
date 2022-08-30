@@ -50,9 +50,12 @@ export default function AppCard({ item, user }) {
         navigation.navigate("CalendarInfoForm", { event: item, user: user });
         break;
       case SignUpMethod.GOOGLE_FORM:
-        // Linking.openURL(formLink);
+        if (!formLink) {
+          Alert.alert("連結已失效，請聯絡協會");
+          return;
+        }
         try {
-          await WebBrowser.openBrowserAsync(formLink);
+          await WebBrowser.openBrowserAsync(encodeURI(formLink));
         } catch (err) {
           Alert.alert("連結已失效，請聯絡協會");
           console.log(err);
@@ -139,17 +142,19 @@ export default function AppCard({ item, user }) {
           <Text numberOfLines={1} ellipsizeMode="tail" style={styles.title}>
             {title}
           </Text>
-          <Text
-            numberOfLines={3}
-            ellipsizeMode="tail"
-            style={styles.description}
-          >
-            {description}
-          </Text>
+          {description && (
+            <Text
+              // numberOfLines={3}
+              ellipsizeMode="tail"
+              style={styles.description}
+            >
+              {description}
+            </Text>
+          )}
           <AppButton
             title="我要報名"
             onPress={onPressRegister}
-            style={{ marginVertical: 10 }}
+            style={{ marginTop: 15, marginBottom: 10 }}
           />
         </View>
       </View>
@@ -175,24 +180,23 @@ const styles = StyleSheet.create({
     backgroundColor: colors.background,
   },
   title: {
-    color: colors.primary,
-    fontSize: 14,
+    // color: colors.primary,
+    fontSize: 16,
     fontWeight: "700",
     textTransform: "uppercase",
   },
   description: {
-    color: colors.primary,
-    fontSize: 10,
+    // color: colors.primary,
+    fontSize: 12,
     fontWeight: "400",
-    marginTop: 10,
-    marginBottom: 5,
+    marginTop: 5,
   },
   image: {
     width: imageWidth,
     height: imageHeight,
   },
   footerContainer: {
-    paddingTop: 10,
+    paddingTop: 15,
     paddingBottom: 5,
     paddingHorizontal: 15,
   },

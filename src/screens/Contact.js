@@ -41,7 +41,8 @@ export default Contact = () => {
   return (
     <View style={{ backgroundColor: colors.background, height: "100%" }}>
       <ScrollView
-        contentContainerStyle={{ paddingTop: 20, paddingHorizontal: 20 }}
+        style={{ height: "100%" }}
+        contentContainerStyle={{ paddingVertical: 20, paddingHorizontal: 20 }}
       >
         <View
           style={{
@@ -59,7 +60,7 @@ export default Contact = () => {
           }}
         >
           <MapView
-            initialRegion={{
+            region={{
               latitude: 25.05250921846677,
               longitude: 121.52005896971527,
               latitudeDelta: 0.005,
@@ -100,7 +101,7 @@ export default Contact = () => {
               <AntDesign
                 name="phone"
                 size={20}
-                color="#FFF"
+                // color="#FFF"
                 style={{ marginRight: 5 }}
               />
             }
@@ -115,13 +116,15 @@ export default Contact = () => {
               justifyContent: "flex-start",
               paddingLeft: 15,
             }}
+            bgColor={colors.background}
+            textColor={"#000"}
           />
           <AppButton
             leftIcon={
               <MaterialCommunityIcons
                 name="email-outline"
                 size={20}
-                color="#FFF"
+                // color="#FFF"
                 style={{ marginRight: 5 }}
               />
             }
@@ -135,6 +138,8 @@ export default Contact = () => {
               justifyContent: "flex-start",
               paddingLeft: 15,
             }}
+            bgColor={colors.background}
+            textColor={"#000"}
           />
         </View>
         <View style={{ flexDirection: "row" }}>
@@ -156,13 +161,15 @@ export default Contact = () => {
               justifyContent: "flex-start",
               paddingLeft: 15,
             }}
+            bgColor={colors.background}
+            textColor={"#000"}
           />
           <AppButton
             leftIcon={
               <Feather
                 name="facebook"
                 size={20}
-                color="#FFF"
+                // color="#FFF"
                 style={{ marginRight: 5 }}
               />
             }
@@ -176,6 +183,8 @@ export default Contact = () => {
               justifyContent: "flex-start",
               paddingLeft: 15,
             }}
+            bgColor={colors.background}
+            textColor={"#000"}
           />
         </View>
       </ScrollView>

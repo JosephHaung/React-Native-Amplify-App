@@ -33,6 +33,9 @@ exports.handler = async (event) => {
       WithDecryption: true,
     })
     .promise();
+
+  const body = JSON.parse(event.body);
+  const user = body.user;
   // return {
   //   statusCode: 200,
   //   //  Uncomment below to enable CORS requests
@@ -40,14 +43,24 @@ exports.handler = async (event) => {
   //   //      "Access-Control-Allow-Origin": "*",
   //   //      "Access-Control-Allow-Headers": "*"
   //   //  },
-  //   body: GMAIL_CLIENT_ID.Value,
+  //   body: body,
+  //   user: user,
   // };
-  const body = JSON.parse(event.body);
-  const mailData = {
-    from: "重聽福利協會 <joseph.hhj@gmail.com>",
-    to: ["joseph.hhj@gmail.com", event.email],
-    subject: body.subject,
-    text: body.text,
+  const userInfo = `姓名：${user.name}
+  Email：${user.email}
+  電話：${user.phone_number}
+  `;
+  const mailDataToOrg = {
+    from: "重聽福利協會APP <tw.hearhard@gmail.com>",
+    to: "tw.hearhard@gmail.com",
+    subject: "新報名 – " + body.eventName,
+    html: `<p style="white-space: pre-line"><b>用戶資料</b>\n${userInfo}\n\n<b>提交資料</b>\n${body.text}</p>`,
+  };
+  const mailDataToUser = {
+    from: "重聽福利協會 <tw.hearhard@gmail.com>",
+    to: user.email,
+    subject: "報名成功 – " + body.eventName,
+    html: `<p style="white-space: pre-line">您好，我們已收到您提交的<b>${body.eventName}</b>表單，若有疑問請回覆此郵件。\n\n${body.text}\n\n\n重聽福利協會</p>`,
   };
   try {
     const OAuth2Client = new google.auth.OAuth2(
@@ -62,10 +75,9 @@ exports.handler = async (event) => {
 
     const transporter = nodemailer.createTransport({
       service: "gmail",
-
       auth: {
         type: "OAuth2",
-        user: "joseph.hhj@gmail.com",
+        user: "tw.hearhard@gmail.com",
         clientId: GMAIL_CLIENT_ID.Value,
         clientSecret: GMAIL_CLIENT_SECRET.Value,
         refreshToken: GMAIL_REFRESH_TOKEN.Value,
@@ -73,7 +85,8 @@ exports.handler = async (event) => {
       },
     });
 
-    const info = await transporter.sendMail(mailData);
+    await transporter.sendMail(mailDataToOrg);
+    const info = await transporter.sendMail(mailDataToUser);
     return {
       statusCode: 200,
       //  Uncomment below to enable CORS requests

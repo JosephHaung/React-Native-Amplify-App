@@ -15,6 +15,7 @@ import { API } from "aws-amplify";
 import AppButton from "../components/AppButton";
 import AppModal from "../components/AppModal";
 import { useNavigation } from "@react-navigation/native";
+import { Entypo } from "@expo/vector-icons";
 
 export default function AppForm({ route }) {
   const {
@@ -67,23 +68,35 @@ export default function AppForm({ route }) {
     if (title === "9號表評估") {
       return (
         <View style={styles.section}>
-          <Text style={styles.sectionTitleText}>評估9號報告書</Text>
+          <Text style={styles.sectionTitleText}>
+            <Entypo name="leaf" size={20} color="black" /> 評估9號報告書
+          </Text>
           <Text
             style={{
-              marginLeft: 10,
+              marginLeft: 5,
               fontSize: 16,
               fontWeight: "400",
               lineHeight: 24,
             }}
           >
-            必須先向輔具中心登記，
+            須先向輔具中心登記，
             <Text
               onPress={onPressLink}
               style={{ textDecorationLine: "underline" }}
             >
-              所屬輔具中心查詢
+              點此查詢
             </Text>
-            {"\n"}
+            所屬輔具中心，評估時請攜帶：
+          </Text>
+          <Text
+            style={{
+              marginTop: 5,
+              marginLeft: 20,
+              fontSize: 14,
+              fontWeight: "500",
+              lineHeight: 20,
+            }}
+          >
             1. 身分證(若無身分證請攜帶戶口名簿){"\n"}
             2. 身障手冊{"\n"}
             3. 印章（無法簽名者請攜帶）
@@ -91,29 +104,44 @@ export default function AppForm({ route }) {
         </View>
       );
     } else if (title === "25號表評估") {
-      <View style={styles.section}>
-        <Text style={styles.sectionTitleText}>評估25號報告書</Text>
-        <Text
-          style={{
-            marginLeft: 10,
-            fontSize: 16,
-            fontWeight: "400",
-            lineHeight: 24,
-          }}
-        >
-          必須先向輔具中心登記，
-          <Text
-            onPress={onPressLink}
-            style={{ textDecorationLine: "underline" }}
-          >
-            所屬輔具中心查詢
+      return (
+        <View style={styles.section}>
+          <Text style={styles.sectionTitleText}>
+            <Entypo name="leaf" size={20} color="black" /> 評估25號報告書
           </Text>
-          {"\n"}
-          1. 身分證(若無身分證請攜帶戶口名簿){"\n"}
-          2. 身障手冊{"\n"}
-          3. 印章（無法簽名者請攜帶）
-        </Text>
-      </View>;
+          <Text
+            style={{
+              marginLeft: 10,
+              fontSize: 16,
+              fontWeight: "400",
+              lineHeight: 20,
+            }}
+          >
+            須先向輔具中心登記，
+            <Text
+              onPress={onPressLink}
+              style={{ textDecorationLine: "underline" }}
+            >
+              點此查詢
+            </Text>
+            所屬輔具中心，評估時請攜帶：
+          </Text>
+          <Text
+            style={{
+              marginTop: 5,
+              marginLeft: 20,
+              fontSize: 14,
+              fontWeight: "500",
+              lineHeight: 20,
+            }}
+          >
+            1. 新的助聽器及其發票、保固書{"\n"}
+            2. 核定公文函{"\n"}
+            3. 09評估報告書或6個月內裸耳聽力圖{"\n"}
+            4. 身障證明
+          </Text>
+        </View>
+      );
     }
   };
 
@@ -134,7 +162,9 @@ export default function AppForm({ route }) {
         }}
       >
         <View style={styles.section}>
-          <Text style={styles.sectionTitleText}>基本資料</Text>
+          <Text style={styles.sectionTitleText}>
+            <Entypo name="leaf" size={20} color="black" /> 基本資料
+          </Text>
           <Controller
             control={control}
             rules={{
@@ -273,7 +303,7 @@ const styles = StyleSheet.create({
   sectionTitleText: {
     fontSize: 18,
     fontWeight: "500",
-    marginBottom: 5,
+    marginBottom: 10,
     // marginLeft: 15,
   },
   section: {

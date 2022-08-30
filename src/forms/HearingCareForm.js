@@ -7,6 +7,8 @@ import {
   Alert,
   StyleSheet,
   ScrollView,
+  Platform,
+  TouchableOpacity,
 } from "react-native";
 import { useForm, Controller } from "react-hook-form";
 import AppTextInput from "../components/AppTextInput";
@@ -18,7 +20,9 @@ import { API } from "aws-amplify";
 import AppButton from "../components/AppButton";
 import AppModal from "../components/AppModal";
 import * as mutations from "../graphql/mutations";
-import { MaterialCommunityIcons } from "@expo/vector-icons";
+import { MaterialCommunityIcons, Entypo } from "@expo/vector-icons";
+import DatePicker from "react-native-date-picker";
+import moment from "moment-timezone";
 
 const SERVICES = [
   { id: 0, name: "聽力保健講座 (1小時，人數不限)" },
@@ -53,20 +57,39 @@ export default function HearingCareForm({ route }) {
   const [open3, setOpen3] = useState(false);
   const [status, setStatus] = useState(0);
   const [open, setOpen] = useState(false);
+  const [showDatePicker1, setShowDatePicker1] = useState(false);
+  const [showDatePicker2, setShowDatePicker2] = useState(false);
+  const [showDatePicker3, setShowDatePicker3] = useState(false);
   const agentNameInput = useRef();
   const phoneNumberInput = useRef();
   const emailInput = useRef();
 
+  const toggleDatePicker1 = () => {
+    setShowDatePicker1(!showDatePicker1);
+  };
+  const toggleDatePicker2 = () => {
+    setShowDatePicker2(!showDatePicker2);
+  };
+  const toggleDatePicker3 = () => {
+    setShowDatePicker3(!showDatePicker3);
+  };
+
   const onSubmit = async (data) => {
     const apiName = "sendEmail";
     const path = "/email";
+    // const body = {
+    //   eventName: route.params.event.title,
+    //   text: getFormattedData()[1],
+    //   user: route.params.user.attributes,
+    // };
     const res = await API.post(apiName, path, {
       body: {
-        subject: "報名",
+        eventName: route.params.event.title,
         text: getFormattedData()[1],
+        user: route.params.user.attributes,
       },
-      userEmail: route.params.user.attributes.email,
     });
+    // console.log(route.params.user.attributes);
 
     const res2 = await API.graphql({
       query: mutations.createRegistration,
@@ -85,8 +108,9 @@ export default function HearingCareForm({ route }) {
     let services = "";
     for (let id of data.services) {
       services += SERVICES[id].name;
-      services += " ";
+      services += "\n";
     }
+    services = services.slice(0, -1);
     const formattedReact = (
       <View style={{ alignItems: "center", marginHorizontal: 20 }}>
         <Text style={styles.keyText}>機構或單位名稱</Text>
@@ -101,41 +125,35 @@ export default function HearingCareForm({ route }) {
         <Text style={styles.valueText}>{services}</Text>
         <Text style={styles.keyText}>預計辦理時程（志願一）</Text>
         <Text style={styles.valueText}>
-          {data.date1.toISOString().substring(0, 10)}
+          {moment(data.date1).tz("Asia/Taipei").format("YYYY/MM/DD")}{" "}
           {data.apm1 === "am" ? "上午" : "下午"}
         </Text>
         <Text style={styles.keyText}>預計辦理時程（志願二）</Text>
         <Text style={styles.valueText}>
-          {data.date2.toISOString().substring(0, 10)}
+          {moment(data.date2).tz("Asia/Taipei").format("YYYY/MM/DD")}{" "}
           {data.apm2 === "am" ? "上午" : "下午"}
         </Text>
         <Text style={styles.keyText}>預計辦理時程（志願三）</Text>
         <Text style={styles.valueText}>
-          {data.date3.toISOString().substring(0, 10)}
+          {moment(data.date3).tz("Asia/Taipei").format("YYYY/MM/DD")}{" "}
           {data.apm3 === "am" ? "上午" : "下午"}
         </Text>
       </View>
     );
-    const formattedHTML = `
-您已成功報名${route.params.event.name}，以下為提交內容：
-
-機構或單位名稱：${data.orgName}
+    const formattedHTML = `機構或單位名稱：${data.orgName}
 承辦人姓名、職稱：${data.agentName}
 聯絡電話：${data.phoneNumber}
 聯絡Email：${data.email}
 服務需求：${services}
-預計辦理時程（志願一）：${data.date1.toISOString().substring(0, 10)} ${
-      data.apm1 === "am" ? "上午" : "下午"
-    }
-預計辦理時程（志願二）：${data.date2.toISOString().substring(0, 10)} ${
-      data.apm2 === "am" ? "上午" : "下午"
-    }
-預計辦理時程（志願三）：${data.date3.toISOString().substring(0, 10)} ${
-      data.apm3 === "am" ? "上午" : "下午"
-    }
-
-若有疑問，請回覆此郵件。
-    `;
+預計辦理時程（志願一）：${moment(data.date1)
+      .tz("Asia/Taipei")
+      .format("YYYY/MM/DD")} ${data.apm1 === "am" ? "上午" : "下午"}
+預計辦理時程（志願二）：${moment(data.date2)
+      .tz("Asia/Taipei")
+      .format("YYYY/MM/DD")} ${data.apm2 === "am" ? "上午" : "下午"}
+預計辦理時程（志願三）：${moment(data.date3)
+      .tz("Asia/Taipei")
+      .format("YYYY/MM/DD")} ${data.apm3 === "am" ? "上午" : "下午"}`;
     return [formattedReact, formattedHTML];
   };
 
@@ -168,7 +186,9 @@ export default function HearingCareForm({ route }) {
         }}
       >
         <View style={styles.section}>
-          <Text style={styles.sectionTitleText}>基本資料</Text>
+          <Text style={styles.sectionTitleText}>
+            <Entypo name="leaf" size={20} color="black" /> 基本資料
+          </Text>
 
           <Controller
             control={control}
@@ -245,7 +265,9 @@ export default function HearingCareForm({ route }) {
           />
         </View>
         <View style={styles.section}>
-          <Text style={styles.sectionTitleText}>服務需求 (可複選)</Text>
+          <Text style={styles.sectionTitleText}>
+            <Entypo name="leaf" size={20} color="black" /> 服務需求 (可複選)
+          </Text>
 
           <Controller
             control={control}
@@ -286,7 +308,8 @@ export default function HearingCareForm({ route }) {
         </View>
         <View style={styles.section}>
           <Text style={[styles.sectionTitleText, { marginBottom: 20 }]}>
-            預計辦理時程 (實際日期待聯繫確認)
+            <Entypo name="leaf" size={20} color="black" /> 預計辦理時程
+            (實際日期待聯繫確認)
           </Text>
           <View style={{ flexDirection: "row", marginBottom: 20 }}>
             <Text
@@ -301,18 +324,50 @@ export default function HearingCareForm({ route }) {
             </Text>
             <Controller
               control={control}
-              render={({ field: { onChange, onBlur, value } }) => (
-                <DateTimePicker
-                  value={value}
-                  onChange={(event, selectedDate) => onChange(selectedDate)}
-                  locale="zh-Hant"
-                  mode="date"
-                  style={{
-                    minWidth: 100,
-                  }}
-                  display="compact"
-                />
-              )}
+              render={({ field: { onChange, onBlur, value } }) =>
+                Platform.OS === "ios" ? (
+                  <DateTimePicker
+                    value={value}
+                    onChange={(event, selectedDate) => onChange(selectedDate)}
+                    locale="zh-Hant"
+                    mode="date"
+                    style={{
+                      minWidth: 100,
+                    }}
+                    display="compact"
+                  />
+                ) : (
+                  <>
+                    {showDatePicker1 && (
+                      <DateTimePicker
+                        value={value}
+                        onChange={(event, selectedDate) => {
+                          onChange(selectedDate);
+                          toggleDatePicker1();
+                        }}
+                        locale="zh-Hant"
+                        mode="date"
+                        display="default"
+                      />
+                    )}
+                    <TouchableOpacity
+                      style={{
+                        paddingHorizontal: 10,
+                        paddingVertical: 5,
+                        backgroundColor: "#f0f0f0",
+                        borderRadius: 8,
+                        alignItems: "center",
+                        justifyContent: "center",
+                      }}
+                      onPress={toggleDatePicker1}
+                    >
+                      <Text style={{ fontSize: 16 }}>
+                        {moment(value).tz("Asia/Taipei").format("YYYY/MM/DD")}
+                      </Text>
+                    </TouchableOpacity>
+                  </>
+                )
+              }
               name="date1"
             />
 
@@ -348,7 +403,7 @@ export default function HearingCareForm({ route }) {
                   textStyle={{
                     fontSize: 16,
                     fontWeight: "500",
-                    color: colors.primary,
+                    // color: colors.primary,
                   }}
                 />
               )}
@@ -368,18 +423,50 @@ export default function HearingCareForm({ route }) {
             </Text>
             <Controller
               control={control}
-              render={({ field: { onChange, onBlur, value } }) => (
-                <DateTimePicker
-                  value={value}
-                  onChange={(event, selectedDate) => onChange(selectedDate)}
-                  locale="zh-Hant"
-                  mode="date"
-                  style={{
-                    minWidth: 100,
-                  }}
-                  display="compact"
-                />
-              )}
+              render={({ field: { onChange, onBlur, value } }) =>
+                Platform.OS === "ios" ? (
+                  <DateTimePicker
+                    value={value}
+                    onChange={(event, selectedDate) => onChange(selectedDate)}
+                    locale="zh-Hant"
+                    mode="date"
+                    style={{
+                      minWidth: 100,
+                    }}
+                    display="compact"
+                  />
+                ) : (
+                  <>
+                    {showDatePicker2 && (
+                      <DateTimePicker
+                        value={value}
+                        onChange={(event, selectedDate) => {
+                          onChange(selectedDate);
+                          toggleDatePicker2();
+                        }}
+                        locale="zh-Hant"
+                        mode="date"
+                        display="default"
+                      />
+                    )}
+                    <TouchableOpacity
+                      style={{
+                        paddingHorizontal: 10,
+                        paddingVertical: 5,
+                        backgroundColor: "#f0f0f0",
+                        borderRadius: 8,
+                        alignItems: "center",
+                        justifyContent: "center",
+                      }}
+                      onPress={toggleDatePicker2}
+                    >
+                      <Text style={{ fontSize: 16 }}>
+                        {moment(value).tz("Asia/Taipei").format("YYYY/MM/DD")}
+                      </Text>
+                    </TouchableOpacity>
+                  </>
+                )
+              }
               name="date2"
             />
 
@@ -415,7 +502,7 @@ export default function HearingCareForm({ route }) {
                   textStyle={{
                     fontSize: 16,
                     fontWeight: "500",
-                    color: colors.primary,
+                    // color: colors.primary,
                   }}
                 />
               )}
@@ -435,18 +522,51 @@ export default function HearingCareForm({ route }) {
             </Text>
             <Controller
               control={control}
-              render={({ field: { onChange, onBlur, value } }) => (
-                <DateTimePicker
-                  value={value}
-                  onChange={(event, selectedDate) => onChange(selectedDate)}
-                  locale="zh-Hant"
-                  mode="date"
-                  style={{
-                    minWidth: 100,
-                  }}
-                  display="compact"
-                />
-              )}
+              render={({ field: { onChange, onBlur, value } }) =>
+                Platform.OS === "ios" ? (
+                  <DateTimePicker
+                    value={value}
+                    onChange={(event, selectedDate) => onChange(selectedDate)}
+                    locale="zh-Hant"
+                    mode="date"
+                    style={{
+                      minWidth: 100,
+                    }}
+                    display="compact"
+                  />
+                ) : (
+                  <>
+                    {showDatePicker3 && (
+                      <DateTimePicker
+                        value={value}
+                        onChange={(event, selectedDate) => {
+                          onChange(selectedDate);
+                          console.log(selectedDate);
+                          toggleDatePicker3();
+                        }}
+                        locale="zh-Hant"
+                        mode="date"
+                        display="default"
+                      />
+                    )}
+                    <TouchableOpacity
+                      style={{
+                        paddingHorizontal: 10,
+                        paddingVertical: 5,
+                        backgroundColor: "#f0f0f0",
+                        borderRadius: 8,
+                        alignItems: "center",
+                        justifyContent: "center",
+                      }}
+                      onPress={toggleDatePicker3}
+                    >
+                      <Text style={{ fontSize: 16 }}>
+                        {moment(value).tz("Asia/Taipei").format("YYYY/MM/DD")}
+                      </Text>
+                    </TouchableOpacity>
+                  </>
+                )
+              }
               name="date3"
             />
 
@@ -482,7 +602,7 @@ export default function HearingCareForm({ route }) {
                   textStyle={{
                     fontSize: 16,
                     fontWeight: "500",
-                    color: colors.primary,
+                    // color: colors.primary,
                   }}
                 />
               )}
@@ -514,35 +634,26 @@ export default function HearingCareForm({ route }) {
           setStatus={setStatus}
           onSubmit={handleSubmit(onSubmit)}
         >
-          <View
-            style={{
-              flexDirection: "row",
-              marginBottom: 30,
-              borderBottomWidth: 1.5,
-            }}
-          >
-            <MaterialCommunityIcons
-              name="pencil-outline"
-              size={25}
-              color="black"
-              style={{ marginRight: 5 }}
-            />
-            <Text style={{ fontWeight: "700", fontSize: 20 }}>
-              請確認資料正確無誤
-            </Text>
-          </View>
-          <Text
-            style={{
-              fontSize: 16,
-              fontWeight: "500",
-              // textAlign: "left",
-              // alignSelf: "flex-start",
-              //width: "100%",
-              lineHeight: 25,
-            }}
-          >
+          <>
+            <View
+              style={{
+                flexDirection: "row",
+                marginBottom: 30,
+                borderBottomWidth: 1.5,
+              }}
+            >
+              <MaterialCommunityIcons
+                name="pencil-outline"
+                size={25}
+                color="black"
+                style={{ marginRight: 5 }}
+              />
+              <Text style={{ fontWeight: "700", fontSize: 20 }}>
+                請確認資料正確無誤
+              </Text>
+            </View>
             {getFormattedData()[0]}
-          </Text>
+          </>
         </AppModal>
       </View>
     </View>

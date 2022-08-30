@@ -14,13 +14,48 @@ import AppTextInput from "../components/AppTextInput";
 import { getToken } from "../functions";
 import { CALENDAR_ID, TIMETREE_CALENDAR_ID, TIMETREE_ACCESS_TOKEN } from "@env";
 import AppButton from "../components/AppButton";
-import { CalendarList } from "react-native-calendars";
+import { CalendarList, LocaleConfig } from "react-native-calendars";
 import colors from "../theme/colors";
 import Modal from "react-native-modal";
 import { useNavigation } from "@react-navigation/native";
 import AppModal from "../components/AppModal";
 import * as mutations from "../graphql/mutations";
 import { API } from "aws-amplify";
+import { MaterialCommunityIcons } from "@expo/vector-icons";
+
+LocaleConfig.locales.zh = {
+  monthNames: [
+    "一月",
+    "二月",
+    "三月",
+    "四月",
+    "五月",
+    "六月",
+    "七月",
+    "八月",
+    "九月",
+    "十月",
+    "十一月",
+    "十二月",
+  ],
+  monthNamesShort: [
+    "一月",
+    "二月",
+    "三月",
+    "四月",
+    "五月",
+    "六月",
+    "七月",
+    "八月",
+    "九月",
+    "十月",
+    "十一月",
+    "十二月",
+  ],
+  dayNames: ["日", "一", "二", "三", "四", "五", "六"],
+  dayNamesShort: ["日", "一", "二", "三", "四", "五", "六"],
+};
+LocaleConfig.defaultLocale = "zh";
 
 export default function AppForm({ route }) {
   const {
@@ -188,8 +223,7 @@ const AgendaItem = (props) => {
   const [status, setStatus] = useState(0);
   const formDataWithDate = {
     date: item.date,
-    startTime: item.start.dateTime,
-    endTime: item.end.dateTime,
+    time: item.title,
     ...formData,
   };
 
@@ -211,18 +245,16 @@ const AgendaItem = (props) => {
         <Text style={styles.keyText}>選擇時段</Text>
         <Text
           style={styles.valueText}
-        >{`${formDataWithDate.date} ${formDataWithDate.startTime} - ${formDataWithDate.endTime}`}</Text>
+        >{`${formDataWithDate.date}\n${formDataWithDate.time}`}</Text>
       </View>
     );
-    const formattedText = `
-個案姓名：${formDataWithDate.name}
+    const formattedText = `個案姓名：${formDataWithDate.name}
 出生年月日：${formDataWithDate.birthDate}
 聯絡人姓名：${formDataWithDate.contactName}
 與身障者關係：${formDataWithDate.relationship}
 聯絡電話：${formDataWithDate.phoneNumber}
 Line ID：${formDataWithDate.lineId}
-選擇時段：${formDataWithDate.date} ${formDataWithDate.startTime} - ${formDataWithDate.endTime}
-    `;
+選擇時段：${formDataWithDate.date} ${formDataWithDate.time}`;
     return [formattedReact, formattedText];
   };
 
@@ -249,7 +281,7 @@ Line ID：${formDataWithDate.lineId}
         body: JSON.stringify({
           data: {
             attributes: {
-              title: `${formData.agentName} – ${item.summary}`,
+              title: `${user.attributes.name} – ${item.summary}`,
               category: "schedule",
               start_at: item.start.dateTime,
               start_timezone: item.start.timeZone,
@@ -284,10 +316,10 @@ Line ID：${formDataWithDate.lineId}
     const path = "/email";
     const res3 = await API.post(apiName, path, {
       body: {
-        subject: "報名",
+        eventName: event.title,
         text: getFormattedData()[1],
+        user: user.attributes,
       },
-      userEmail: user.attributes.email,
     });
   };
 
@@ -324,15 +356,7 @@ Line ID：${formDataWithDate.lineId}
             請確認資料正確無誤
           </Text>
         </View>
-        <Text
-          style={{
-            fontSize: 16,
-            fontWeight: "500",
-            lineHeight: 25,
-          }}
-        >
-          {getFormattedData()[0]}
-        </Text>
+        {getFormattedData()[0]}
       </AppModal>
     </>
   );

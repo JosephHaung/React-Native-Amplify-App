@@ -28,12 +28,12 @@ const styles = (bgColor) =>
     button: {
       justifyContent: "center",
       alignItems: "center",
-      shadowColor: bgColor,
+      shadowColor: "#000",
       shadowOffset: {
         width: 2,
         height: 2,
       },
-      shadowOpacity: 0.5,
+      shadowOpacity: 0.3,
       shadowRadius: 2.54,
       elevation: 3,
       // width: "100%",

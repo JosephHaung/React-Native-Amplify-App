@@ -6,6 +6,7 @@ import {
   TouchableOpacity,
   TouchableWithoutFeedback,
   Keyboard,
+  Platform,
 } from "react-native";
 import { Auth } from "aws-amplify";
 import AppTextInput from "../../components/AppTextInput";
@@ -33,8 +34,8 @@ export default SignIn = () => {
       setErrorMessage("密碼不相同");
       return;
     }
-    if (!name) {
-      setErrorMessage("請輸入姓名");
+    if (!email || !number || !name) {
+      setErrorMessage("所有欄位皆為必填");
       return;
     }
     try {
@@ -117,7 +118,7 @@ export default SignIn = () => {
           keyboardType="number-pad"
           leftIcon="cellphone"
           ref={phoneInput}
-          returnKeyType="next"
+          returnKeyType={Platform.OS === "ios" ? "done" : "next"}
           onSubmitEditing={() => {
             nameInput.current.focus();
           }}
@@ -132,7 +133,7 @@ export default SignIn = () => {
           placeholder="姓名"
           autoCapitalize="none"
           textContentType="name"
-          leftIcon="user"
+          leftIcon="account"
           ref={nameInput}
           returnKeyType="next"
           onSubmitEditing={() => {

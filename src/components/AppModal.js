@@ -12,6 +12,7 @@ import {
 } from "react-native";
 import { useNavigation } from "@react-navigation/native";
 import AppButton from "./AppButton";
+import colors from "../theme/colors";
 
 export default ({ open, setOpen, children, onSubmit }) => {
   const navigation = useNavigation();
@@ -73,7 +74,7 @@ export default ({ open, setOpen, children, onSubmit }) => {
               alignItems: "center",
             }}
           >
-            <ActivityIndicator />
+            <ActivityIndicator color={colors.primary} />
           </View>
         );
       case 2:
@@ -135,11 +136,12 @@ export default ({ open, setOpen, children, onSubmit }) => {
 
 const styles = StyleSheet.create({
   modalContainer: {
-    //height: 160,
+    // height: 200,
+    // flex: 1,
     justifyContent: "center",
     alignItems: "center",
     backgroundColor: "#fff",
-    marginVertical: "20%",
+    // marginVertical: "20%",
     paddingVertical: 20,
     borderRadius: 10,
     width: 300,
