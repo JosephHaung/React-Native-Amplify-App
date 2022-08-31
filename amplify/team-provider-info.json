@@ -1,37 +1,4 @@
 {
-  "dev": {
-    "awscloudformation": {
-      "AuthRoleName": "amplify-awesomeproject-dev-232054-authRole",
-      "UnauthRoleArn": "arn:aws:iam::443203857215:role/amplify-awesomeproject-dev-232054-unauthRole",
-      "AuthRoleArn": "arn:aws:iam::443203857215:role/amplify-awesomeproject-dev-232054-authRole",
-      "Region": "us-east-1",
-      "DeploymentBucketName": "amplify-awesomeproject-dev-232054-deployment",
-      "UnauthRoleName": "amplify-awesomeproject-dev-232054-unauthRole",
-      "StackName": "amplify-awesomeproject-dev-232054",
-      "StackId": "arn:aws:cloudformation:us-east-1:443203857215:stack/amplify-awesomeproject-dev-232054/ffa16970-b9aa-11ec-a553-0a5b9cdecc07",
-      "AmplifyAppId": "dx2f4wizxe0bo"
-    },
-    "categories": {
-      "auth": {
-        "awesomeproject3ab48687": {
-          "facebookAppId": "1037866796831716"
-        },
-        "true": {},
-        "userPoolGroups": {}
-      },
-      "function": {
-        "awesomeprojecta0defe5a": {
-          "deploymentBucketName": "amplify-awesomeproject-dev-232054-deployment",
-          "s3Key": "amplify-builds/awesomeprojecta0defe5a-4843722f644a35684d6c-build.zip"
-        },
-        "sendEmail": {
-          "deploymentBucketName": "amplify-awesomeproject-dev-232054-deployment",
-          "s3Key": "amplify-builds/sendEmail-66743134495664735942-build.zip",
-          "secretsPathAmplifyAppId": "dx2f4wizxe0bo"
-        }
-      }
-    }
-  },
   "prod": {
     "awscloudformation": {
       "AuthRoleName": "amplify-awesomeproject-prod-145919-authRole",
@@ -46,9 +13,7 @@
     },
     "categories": {
       "auth": {
-        "awesomeproject3ab48687": {
-          "facebookAppId": "1037866796831716"
-        }
+        "awesomeproject3ab48687": {}
       },
       "function": {
         "awesomeprojecta0defe5a": {
@@ -56,9 +21,9 @@
           "s3Key": "amplify-builds/awesomeprojecta0defe5a-4843722f644a35684d6c-build.zip"
         },
         "sendEmail": {
-          "secretsPathAmplifyAppId": "dx2f4wizxe0bo",
           "deploymentBucketName": "amplify-awesomeproject-prod-145919-deployment",
-          "s3Key": "amplify-builds/sendEmail-6b4f4462534b4b764651-build.zip"
+          "s3Key": "amplify-builds/sendEmail-6b4f4462534b4b764651-build.zip",
+          "secretsPathAmplifyAppId": "dx2f4wizxe0bo"
         }
       }
     }

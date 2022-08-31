@@ -58,37 +58,39 @@ export default Home = () => {
   const PAGES = [
     {
       name: "REHAB",
-      icon: <AntDesign name="tool" size={30} color={"#fff"} />,
+      icon: <AntDesign name="tool" size={30} color={colors.secondary} />,
       bgColor: colors.primary,
       textColor: colors.secondary,
     },
     {
       name: "JOB_PROMOTION",
-      icon: <AntDesign name="tool" size={30} color={"#fff"} />,
+      icon: <AntDesign name="notification" size={30} color={colors.primary} />,
       bgColor: colors.secondary,
       textColor: colors.primary,
     },
     {
       name: "HEARING_CARE",
-      icon: <AntDesign name="tool" size={30} color={"#fff"} />,
+      icon: <AntDesign name="team" size={30} color={colors.primary} />,
       bgColor: colors.secondary,
       textColor: colors.primary,
     },
     {
       name: "HEARING_ASSESSMENT",
-      icon: <AntDesign name="tool" size={30} color={"#fff"} />,
+      icon: <AntDesign name="form" size={30} color={colors.secondary} />,
       bgColor: colors.primary,
       textColor: colors.secondary,
     },
     {
       name: "HEARING_TRY",
-      icon: <AntDesign name="tool" size={30} color={"#fff"} />,
+      icon: (
+        <AntDesign name="customerservice" size={30} color={colors.secondary} />
+      ),
       bgColor: colors.primary,
       textColor: colors.secondary,
     },
     {
       name: "CONTACT",
-      icon: <AntDesign name="tool" size={30} color={"#fff"} />,
+      icon: <AntDesign name="phone" size={30} color={colors.primary} />,
       bgColor: colors.secondary,
       textColor: colors.primary,
     },
